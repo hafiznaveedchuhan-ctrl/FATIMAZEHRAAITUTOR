@@ -7,7 +7,7 @@ import Footer from '@/components/Footer'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
 import rehypePrism from 'rehype-prism-plus'
-import { Lock, ChevronLeft, ChevronRight, PlayCircle } from 'lucide-react'
+import { Lock, ChevronLeft, ChevronRight, PlayCircle, MessageSquare } from 'lucide-react'
 
 interface Chapter {
   id: string
@@ -218,8 +218,19 @@ export default async function ChapterPage({
             />
           </div>
 
+          {/* Ask AI button */}
+          <div className="mt-10 flex justify-end">
+            <Link
+              href={`/chat?context=${encodeURIComponent(chapter.title)}`}
+              className="inline-flex items-center gap-2 text-sm text-indigo-400 hover:text-indigo-300 border border-indigo-500/30 hover:border-indigo-500/60 bg-indigo-500/10 hover:bg-indigo-500/20 px-4 py-2 rounded-lg transition"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Ask AI about this chapter
+            </Link>
+          </div>
+
           {/* Quiz CTA */}
-          <div className="mt-14 bg-indigo-600/20 border border-indigo-500/40 rounded-xl p-8 text-center">
+          <div className="mt-6 bg-indigo-600/20 border border-indigo-500/40 rounded-xl p-8 text-center">
             <h3 className="text-2xl font-bold mb-2">Test Your Knowledge</h3>
             <p className="text-gray-400 mb-6 max-w-md mx-auto">
               10 questions covering Chapter {chapter.number}: {chapter.title}.
