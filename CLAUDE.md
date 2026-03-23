@@ -381,3 +381,39 @@ Any future expiry date, any 3-digit CVC
 | **Phase 3** | Production: Docker, K8s, admin dashboard, SEO, monitoring | 5 days |
 
 See `.specify/phase1-spec.md`, `.specify/phase2-spec.md`, `.specify/phase3-spec.md` for detailed specs.
+
+### Python Course Chapters
+
+| # | Chapter Title | Tier |
+|---|---|---|
+| 1 | Python Basics & Variables | Free |
+| 2 | Control Flow & Loops | Free |
+| 3 | Functions & Scope | Free |
+| 4 | Object Oriented Programming | Premium |
+| 5 | Modules & Packages | Premium |
+| 6 | File Handling | Premium |
+| 7 | Exception Handling | Premium |
+| 8 | APIs & Requests | Premium |
+| 9 | Decorators & Generators | Pro |
+| 10 | Advanced Python Concepts | Pro |
+
+Each chapter contains:
+- Complete theory with real-world examples
+- Working code snippets
+- 10 MCQ quiz questions with answers
+- Difficulty: Beginner → Advanced
+
+### Kubernetes Configuration
+
+| Setting | Value |
+|---|---|
+| Namespace | fatimazehra-ai-tutor |
+| Min Replicas | 2 |
+| Max Replicas | 10 |
+| Frontend Port | 3000 |
+| Backend Port | 8000 |
+| Strategy | RollingUpdate |
+| CPU Limit | 500m |
+| Memory Limit | 512Mi |
+| Health Check | /health endpoint |
+| Ingress | Nginx Ingress Controller |
