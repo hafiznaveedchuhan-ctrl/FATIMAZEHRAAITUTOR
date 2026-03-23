@@ -22,6 +22,11 @@ export default function NavBar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
+            {session && (
+              <Link href="/dashboard" className="text-gray-400 hover:text-white transition">
+                Dashboard
+              </Link>
+            )}
             <Link href="/learn" className="text-gray-400 hover:text-white transition">
               Learn
             </Link>
@@ -85,6 +90,11 @@ export default function NavBar() {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 space-y-4 border-t border-surface-700 pt-4">
+            {session && (
+              <Link href="/dashboard" className="block text-gray-400 hover:text-white transition">
+                Dashboard
+              </Link>
+            )}
             <Link href="/learn" className="block text-gray-400 hover:text-white transition">
               Learn
             </Link>

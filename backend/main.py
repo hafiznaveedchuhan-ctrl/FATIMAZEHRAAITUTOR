@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import os
 from database import init_db, close_db
-from routes import auth_router, chapters_router, quiz_router
+from routes import auth_router, chapters_router, quiz_router, progress_router
 
 # Lifecycle manager
 @asynccontextmanager
@@ -47,6 +47,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(chapters_router)
 app.include_router(quiz_router)
+app.include_router(progress_router)
 
 # Health check endpoint
 @app.get("/health")
