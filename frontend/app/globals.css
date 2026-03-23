@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prism syntax highlighting theme (dark) */
+@import 'prismjs/themes/prism-tomorrow.css';
+
 @layer base {
   html {
     @apply scroll-smooth;

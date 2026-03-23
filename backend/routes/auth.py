@@ -2,7 +2,7 @@
 Authentication routes for FatimaZehra-AI-Tutor
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlmodel import Session
@@ -69,7 +69,9 @@ async def register(
     return TokenResponse(
         access_token=token,
         user_id=user.id,
-        email=user.email
+        email=user.email,
+        name=user.name,
+        tier=user.tier
     )
 
 # ==================== Login ====================
@@ -109,26 +111,35 @@ async def login(
     return TokenResponse(
         access_token=token,
         user_id=user.id,
-        email=user.email
+        email=user.email,
+        name=user.name,
+        tier=user.tier
     )
 
 # ==================== Get Current User ====================
 async def get_current_user(
-    token: str = None,
+    authorization: str = Header(None),
     session: AsyncSession = Depends(get_session)
 ) -> User:
     """
-    Dependency to get current user from JWT token
+    Dependency to get current user from JWT token in Authorization header.
+    Expects: Authorization: Bearer <token>
     """
-    if not token:
+    if not authorization:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated"
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"}
         )
 
-    # Remove "Bearer " prefix if present
-    if token.startswith("Bearer "):
-        token = token[7:]
+    # Extract token from "Bearer <token>"
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authorization header format"
+        )
+
+    token = authorization[7:]
 
     # Verify token
     payload = verify_token(token)

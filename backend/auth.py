@@ -35,6 +35,8 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
     user_id: str
     email: str
+    name: str
+    tier: str
 
 # ==================== Password Functions ====================
 def hash_password(password: str) -> str:

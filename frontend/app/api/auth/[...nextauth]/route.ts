@@ -1,8 +1,8 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     // Email/Password authentication
     CredentialsProvider({
@@ -38,7 +38,9 @@ const handler = NextAuth({
           return {
             id: user.user_id,
             email: user.email,
+            name: user.name,
             accessToken: user.access_token,
+            tier: user.tier,
           }
         } catch (error) {
           console.error("Auth error:", error)
@@ -57,7 +59,6 @@ const handler = NextAuth({
 
   pages: {
     signIn: "/auth/login",
-    signUp: "/auth/signup",
   },
 
   session: {
@@ -67,34 +68,36 @@ const handler = NextAuth({
 
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
-    maxAge: 7 * 24 * 60 * 60, // 7 days
+    maxAge: 7 * 24 * 60 * 60,
   },
 
   callbacks: {
-    async jwt({ token, user, account }) {
-      // Add user data to token
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id
         token.email = user.email
+        token.name = user.name
         token.accessToken = (user as any).accessToken
+        token.tier = (user as any).tier
       }
       return token
     },
 
     async session({ session, token }) {
-      // Add token to session
       session.user = {
         id: token.id as string,
         email: token.email as string,
         name: token.name as string,
         image: token.picture as string,
-      }
+        tier: token.tier as string,
+      } as any
       ;(session as any).accessToken = token.accessToken
       return session
     },
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-})
+}
 
+const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }
