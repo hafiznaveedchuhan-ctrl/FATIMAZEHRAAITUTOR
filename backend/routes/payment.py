@@ -2,6 +2,7 @@
 Payment routes for FatimaZehra-AI-Tutor (Stripe TEST MODE ONLY)
 POST /payment/create-session — creates a Stripe Checkout Session
 POST /payment/webhook        — handles Stripe events, updates user tier
+GET  /payment/subscription   — returns current user's subscription status
 """
 
 import os
@@ -148,6 +149,37 @@ async def stripe_webhook(
     # invoice.payment_succeeded / customer.subscription.updated → no action needed
 
     return {"received": True}
+
+
+# ── Internal handlers ─────────────────────────────────────────────────────────
+@router.get("/subscription")
+async def get_subscription(
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    """
+    Return the authenticated user's current subscription status.
+    Used by the frontend dashboard to show plan, expiry, and auto-renew.
+    """
+    stmt = select(Subscription).where(Subscription.user_id == current_user.id)
+    result = await session.execute(stmt)
+    sub = result.scalars().first()
+
+    if not sub:
+        # No subscription record — user is on free tier
+        return {
+            "plan": current_user.tier,
+            "status": "active",
+            "expires_at": None,
+            "auto_renew": False,
+        }
+
+    return {
+        "plan": sub.plan,
+        "status": sub.status,
+        "expires_at": sub.expires_at.isoformat() if sub.expires_at else None,
+        "auto_renew": sub.auto_renew,
+    }
 
 
 # ── Internal handlers ─────────────────────────────────────────────────────────

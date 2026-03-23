@@ -11,7 +11,7 @@ from typing import AsyncGenerator
 # Database URL from environment
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "sqlite:///test.db"  # Default for testing
+    "sqlite+aiosqlite:///test.db"  # Default for testing (async driver required)
 )
 
 # Create async engine for SQLModel

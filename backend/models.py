@@ -4,8 +4,9 @@ SQLModel database models for FatimaZehra-AI-Tutor
 
 from datetime import datetime
 from typing import Optional
-from sqlmodel import SQLModel, Field, Column, JSON
+from sqlmodel import SQLModel, Field, Column, JSON, AutoString
 from pydantic import EmailStr
+from sqlalchemy import String
 import uuid
 
 # Base model with common fields
@@ -17,7 +18,9 @@ class TimestampMixin:
 class User(SQLModel, TimestampMixin, table=True):
     """User account model"""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
-    email: EmailStr = Field(unique=True, index=True, nullable=False)
+    email: EmailStr = Field(
+        sa_column=Column(String, unique=True, index=True, nullable=False)
+    )
     name: str = Field(nullable=False)
     hashed_password: Optional[str] = Field(default=None)  # NULL for OAuth-only users
     tier: str = Field(default="free", nullable=False)  # free, premium, pro
@@ -70,7 +73,7 @@ class QuizQuestion(SQLModel, TimestampMixin, table=True):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     chapter_id: str = Field(foreign_key="chapter.id", index=True, nullable=False)
     question: str = Field(nullable=False)
-    options: dict = Field(sa_column=Column(JSON), nullable=False)  # ["A", "B", "C", "D"]
+    options: dict = Field(sa_column=Column(JSON, nullable=False))  # ["A", "B", "C", "D"]
     correct_answer: int = Field(nullable=False)  # 0-3
     explanation: str = Field(nullable=False)
 
@@ -114,7 +117,7 @@ class QuizAttempt(SQLModel, TimestampMixin, table=True):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     user_id: str = Field(foreign_key="user.id", index=True, nullable=False)
     chapter_id: str = Field(foreign_key="chapter.id", index=True, nullable=False)
-    answers: dict = Field(sa_column=Column(JSON), nullable=False)  # answers data
+    answers: dict = Field(sa_column=Column(JSON, nullable=False))  # answers data
     score: int = Field(nullable=False)  # 0-100
     completed_at: datetime = Field(default_factory=datetime.utcnow, nullable=False, index=True)
 

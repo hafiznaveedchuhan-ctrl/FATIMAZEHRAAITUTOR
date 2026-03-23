@@ -1,18 +1,24 @@
 """
 Progress routes for FatimaZehra-AI-Tutor
-GET /progress/me → full progress summary (stats, chapters, activity)
+GET  /progress/me              → full progress summary (stats, chapters, activity)
+POST /progress/mark-complete   → mark a chapter as completed
 """
 
 from datetime import datetime, timedelta, date
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from pydantic import BaseModel
 
 from models import Chapter, QuizAttempt, UserProgress, User
 from database import get_session
 from routes.auth import get_current_user
 
 router = APIRouter(prefix="/progress", tags=["progress"])
+
+
+class MarkCompleteRequest(BaseModel):
+    chapter_id: str
 
 
 def _calculate_streak(attempts: list[QuizAttempt]) -> int:
@@ -134,3 +140,50 @@ async def get_my_progress(
         "chapter_progress": chapter_progress,
         "recent_activity": recent_activity,
     }
+
+
+@router.post("/mark-complete")
+async def mark_chapter_complete(
+    body: MarkCompleteRequest,
+    session: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Mark a chapter as completed for the authenticated user.
+    Upserts UserProgress(completed=True, last_accessed_at=now).
+    """
+    # Verify chapter exists
+    ch_stmt = select(Chapter).where(Chapter.id == body.chapter_id)
+    ch_result = await session.execute(ch_stmt)
+    chapter = ch_result.scalars().first()
+    if not chapter:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Chapter not found")
+
+    # Enforce tier gating
+    tier_rank = {"free": 0, "premium": 1, "pro": 2}
+    if tier_rank.get(current_user.tier, 0) < tier_rank.get(chapter.tier_required, 0):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Upgrade required")
+
+    # Upsert UserProgress
+    up_stmt = select(UserProgress).where(
+        UserProgress.user_id == current_user.id,
+        UserProgress.chapter_id == body.chapter_id,
+    )
+    up_result = await session.execute(up_stmt)
+    progress = up_result.scalars().first()
+
+    now = datetime.utcnow()
+    if progress:
+        progress.completed = True
+        progress.last_accessed_at = now
+    else:
+        progress = UserProgress(
+            user_id=current_user.id,
+            chapter_id=body.chapter_id,
+            completed=True,
+            last_accessed_at=now,
+        )
+    session.add(progress)
+    await session.commit()
+
+    return {"success": True, "chapter_id": body.chapter_id, "completed": True}

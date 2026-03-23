@@ -456,7 +456,8 @@ CREATE TABLE subscriptions (
 - **Webhook endpoint**: `POST /payment/webhook`
 - **Webhook secret**: .env STRIPE_WEBHOOK_SECRET
 - **Products**: Premium (monthly), Pro (monthly)
-- **Events**: payment_intent.succeeded, invoice.payment_failed
+- **Events**: checkout.session.completed (subscription activated), customer.subscription.deleted (cancellation/downgrade)
+- **Note**: `checkout.session.completed` is the correct event for Stripe Checkout subscription flows. `payment_intent.succeeded` applies to one-time payments only.
 
 **Frontend**:
 - **Pages**: `/pricing`, `/checkout` (Stripe-hosted)
@@ -473,7 +474,7 @@ CREATE TABLE subscriptions (
 **Acceptance Criteria**:
 - [ ] Pricing page shows 3 tiers with correct prices
 - [ ] Checkout button creates Stripe session; redirects to checkout.stripe.com
-- [ ] Webhook receives payment_intent.succeeded; updates user.tier to premium
+- [ ] Webhook receives checkout.session.completed; updates user.tier to premium/pro
 - [ ] User tier checked on chapter view; Premium users access chapters 4–10
 - [ ] Free users see lock + "Upgrade" button on chapter 4
 - [ ] Subscription status shows on dashboard

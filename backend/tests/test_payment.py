@@ -80,8 +80,8 @@ async def test_create_session_already_on_free(client):
     mock_customer.id = "cus_test123"
 
     with (
-        patch("routes.payment.stripe.Customer.create", return_value=mock_customer),
-        patch("routes.payment.stripe.checkout.Session.create", return_value=mock_session),
+        patch("stripe.Customer.create", return_value=mock_customer),
+        patch("stripe.checkout.Session.create", return_value=mock_session),
     ):
         res = client.post(
             "/payment/create-session",
