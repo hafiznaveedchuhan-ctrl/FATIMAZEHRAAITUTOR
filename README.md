@@ -25,8 +25,8 @@ A world-class Python learning platform powered by AI coaching. Learn 10 chapters
 🔜 **Spaced Repetition**: Smart review scheduling
 🔜 **Email Coach**: Weekly progress summaries + tips
 
-### Phase 3: Production Ready (Planned)
-🔜 **Docker & Kubernetes**: Production deployment configs
+### Phase 3: Production Ready (In Progress)
+✅ **Docker & Kubernetes**: Dockerfiles, docker-compose dev/prod, full K8s manifests (namespace, deployments, services, ingress, HPA)
 🔜 **Admin Dashboard**: Analytics, revenue, user metrics
 🔜 **SEO & Performance**: Lighthouse ≥ 90, sitemap, metadata
 🔜 **Monitoring**: Sentry error tracking, custom metrics
@@ -494,7 +494,7 @@ npm run start
 - [ ] Email coach feature pending
 
 ### Phase 3
-- [ ] Docker & K8s configs not tested in production
+- [x] Docker & K8s configs created (see `k8s/` and `docker-compose.prod.yml`)
 - [ ] CI/CD pipeline (GitHub Actions) not configured
 - [ ] Advanced caching (Redis) not implemented
 - [ ] Multi-region failover not setup
