@@ -208,3 +208,176 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+---
+
+## Project: FatimaZehra-AI-Tutor
+
+**Official Name**: FatimaZehra-AI-Tutor
+**Package**: `fatimazehra-ai-tutor`
+**Hackathon**: Panaversity Agent Factory Hackathon IV
+**GitHub**: https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR
+**Branch**: `main`
+
+### Technology Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | Next.js 14 (App Router, TypeScript) |
+| Backend | FastAPI (Python 3.12) |
+| Database | Neon PostgreSQL + SQLModel ORM |
+| Cache | Upstash Redis |
+| Auth | NextAuth.js + JWT (httpOnly cookies) |
+| OAuth | Google OAuth 2.1 |
+| AI | OpenAI GPT-4 + GPT-4 Turbo |
+| Payments | Stripe TEST MODE (sk_test_..., pk_test_...) |
+| Storage | Cloudflare R2 |
+| Email | Resend |
+| Monitoring | Sentry (frontend + backend) |
+| Containers | Docker + Docker Compose |
+| Orchestration | Kubernetes (Docker Desktop or Minikube) |
+| Testing | Playwright (browser-use), pytest (backend), Vitest (frontend) |
+
+### Folder Structure
+
+```
+FatimaZehra-AI-Tutor/
+├── frontend/                  # Next.js 14 app
+├── backend/                   # FastAPI application
+├── k8s/                       # Kubernetes manifests
+├── .specify/                  # Spec files + templates
+│   ├── memory/
+│   │   └── constitution.md
+│   ├── phase1-spec.md         # MVP
+│   ├── phase2-spec.md         # AI personalization
+│   ├── phase3-spec.md         # Production + K8s
+│   ├── ui-spec.md
+│   ├── task-plan.md
+│   └── templates/
+├── history/                   # PHRs + ADRs
+│   ├── prompts/
+│   └── adr/
+├── docker-compose.yml         # Local dev (postgres + redis)
+├── docker-compose.prod.yml    # Production config
+├── CLAUDE.md                  # This file
+├── README.md                  # Setup + API docs
+└── .env.example               # All env vars (no secrets)
+```
+
+### API Endpoints (Backend)
+
+**Authentication**:
+```
+POST   /auth/register          {email, password, name} → {user_id, token}
+POST   /auth/login             {email, password} → {token, user}
+POST   /auth/google-callback   {code} → {token, user}
+GET    /auth/me                → current user + subscription
+POST   /auth/logout            → {}
+```
+
+**Chapters**:
+```
+GET    /chapters               → [{id, number, title, tier_required, ...}]
+GET    /chapters/{id}          → {content_mdx, quiz_questions, ...}
+```
+
+**Quiz**:
+```
+POST   /quiz/submit            {chapter_id, answers[]} → {score, results}
+GET    /quiz/{chapter_id}      → questions for chapter
+```
+
+**Progress**:
+```
+GET    /progress/{user_id}     → {chapters_completed, quiz_scores, streak}
+POST   /progress/mark-complete {chapter_id} → {updated_progress}
+```
+
+**Payments**:
+```
+POST   /payment/create-session {plan: "premium"|"pro"} → {session_url}
+POST   /payment/webhook        (Stripe) → update subscription
+```
+
+**AI (Phase 2+)**:
+```
+POST   /ai/analyze-weaknesses  {user_id} → {weak_topics, recommendations}
+GET    /ai/learning-path       → personalized chapters
+POST   /ai/chat                {message, context} → streaming response
+```
+
+### Database Schema
+
+| Table | Columns | Purpose |
+|---|---|---|
+| `users` | id, email, name, hashed_password, tier(free/premium/pro), created_at, updated_at | User accounts |
+| `chapters` | id, number, title, slug, content_mdx, tier_required, created_at | Python course content |
+| `quiz_questions` | id, chapter_id, question, options(jsonb), correct_answer, explanation | Quiz MCQs |
+| `quiz_attempts` | id, user_id, chapter_id, answers(jsonb), score, completed_at | Quiz submissions |
+| `user_progress` | id, user_id, chapter_id, completed, last_accessed_at | Completion tracking |
+| `subscriptions` | id, user_id, stripe_customer_id, stripe_sub_id, plan, status, expires_at | Payment tracking |
+
+### Freemium Tiers
+
+| Tier | Price | Features |
+|---|---|---|
+| **Free** | $0 | Chapters 1–3, basic quiz, 50% AI chat tokens |
+| **Premium** | $9.99/mo | All 10 chapters, unlimited quiz, 5 AI chats/day |
+| **Pro** | $19.99/mo | Everything + weak-point analysis, personalized paths, email coach |
+
+### Environment Variables
+
+All in `.env.example` (never commit `.env`):
+
+```
+# OpenAI
+OPENAI_API_KEY=
+
+# Stripe TEST MODE
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Database
+DATABASE_URL=postgresql+asyncpg://...
+
+# NextAuth
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=http://localhost:3000
+
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Redis
+REDIS_URL=
+
+# Monitoring
+SENTRY_DSN=
+
+# Email
+RESEND_API_KEY=
+```
+
+### Git Workflow
+
+- **Commit format**: `feat: [feature name] - FatimaZehra-AI-Tutor`
+- **Push**: To `main` after every major feature passes tests
+- **Branching**: Feature branches from `main`, PR → `main`
+- **Test gates**: Browser-use + pytest + Vitest must pass before commit
+
+### Stripe Testing
+
+**TEST MODE ONLY** — Development uses `sk_test_` and `pk_test_` keys.
+
+Test card: `4242 4242 4242 4242`
+Any future expiry date, any 3-digit CVC
+
+### Development Phases
+
+| Phase | Focus | Duration |
+|---|---|---|
+| **Phase 1** | MVP auth, chapters, quiz, stripe checkout | 10 days |
+| **Phase 2** | Backend AI: weak-point analysis, learning paths, email coach | 5 days |
+| **Phase 3** | Production: Docker, K8s, admin dashboard, SEO, monitoring | 5 days |
+
+See `.specify/phase1-spec.md`, `.specify/phase2-spec.md`, `.specify/phase3-spec.md` for detailed specs.

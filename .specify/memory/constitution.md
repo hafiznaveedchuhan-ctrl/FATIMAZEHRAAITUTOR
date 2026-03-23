@@ -1,55 +1,133 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# FatimaZehra-AI-Tutor Constitution
+
+A world-class Python learning platform for Panaversity Agent Factory Hackathon IV.
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Spec-First Workflow
+Every feature begins with a written spec — no code without approval. Architecture decisions are explicit and traceable. PHRs capture all significant work. Specs drive implementation; implementation does not drive specs.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Smallest Viable Diff
+Changes are minimal and focused. No refactoring unrelated code. No "nice-to-haves" or invented features. Each PR is independently testable. Prefer simplicity; avoid premature abstraction.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Security-First
+- **Secrets**: Never hardcoded. All via `.env`; `.env` never committed.
+- **Auth**: JWT in httpOnly cookies; NextAuth.js enforced.
+- **AI**: Phase 1 rule — OpenAI calls from frontend only (Next.js API route), NOT FastAPI backend. Backend never calls LLM in Phase 1.
+- **Payments**: Stripe TEST MODE only during development (sk_test_, pk_test_ keys).
+- **Data**: User data encrypted at rest; HTTPS everywhere.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Type Safety
+- **Frontend**: TypeScript strict mode; no `any` without JSDoc.
+- **Backend**: Python type hints on all functions; Ruff linting enforced.
+- **Database**: SQLModel ORM; no raw SQL except complex queries (documented).
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Testing Mandatory
+- **Backend**: pytest; coverage ≥ 80%; integration tests for API endpoints.
+- **Frontend**: Vitest for components; browser-use for E2E flows after every feature.
+- **Gate**: All tests pass before commit; red tests block pushes.
 
-### [PRINCIPLE_6_NAME]
+### VI. Accessibility & UX
+- Dark mode default (WCAG AA compliance).
+- Light mode toggle with system preference detection.
+- Mobile-first responsive design (breakpoints: 640, 768, 1024, 1280).
+- All interactive elements keyboard-accessible.
+- 3-second page load time target (Lighthouse ≥ 90).
 
+### VII. Observable Systems
+- **Logging**: Structured JSON logs; backend logs to stdout; frontend logs to Sentry.
+- **Metrics**: Request latency, error rates, user events.
+- **Traces**: Distributed tracing via OpenTelemetry (optional Phase 3).
+- **Monitoring**: Sentry alerts on errors; no silent failures.
 
-[PRINCIPLE__DESCRIPTION]
+### VIII. Git Discipline
+- **Commit format**: `feat: [feature name] - FatimaZehra-AI-Tutor`
+- **One feature per commit**: Atomic, reversible.
+- **Auto-push**: After passing tests, push to `main` immediately.
+- **No force-push**: History is sacred; revert instead.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### IX. Phase-Gated Features
+- **Phase 1 (MVP)**: Auth, chapters, quiz, Stripe free/paid tiers.
+- **Phase 2**: Backend AI features (weak-point analysis, personalized paths, email coach).
+- **Phase 3**: Production (Docker, K8s, admin dashboard, SEO, monitoring).
+- Code for later phases does NOT exist in Phase 1.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### X. No Invented Data
+- All APIs, schemas, and contracts are explicit in specs.
+- No mock data; all test data is seeded from SQL fixtures.
+- External dependencies (OpenAI, Stripe) are real services or test mode.
+- APIs match contract exactly; no surprises.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Technology Standards
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Frontend Stack
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS + shadcn/ui (Radix UI primitives)
+- **Animations**: Framer Motion (spring physics, staggered)
+- **Forms**: React Hook Form + Zod validation
+- **State**: React Context (no Redux for MVP)
+- **API calls**: fetch + SWR caching
+- **Code blocks**: Prism.js with syntax highlighting
+- **Charts**: Recharts (progress rings, bar charts)
+- **Icons**: Lucide React
+
+### Backend Stack
+- **Framework**: FastAPI (async)
+- **ORM**: SQLModel (pydantic + SQLAlchemy)
+- **Database driver**: asyncpg (async PostgreSQL)
+- **Auth**: JWT; python-jose + passlib
+- **Validation**: Pydantic v2
+- **Linting**: Ruff
+- **Type checking**: Pyright or mypy
+- **Testing**: pytest + pytest-asyncio
+
+### Database
+- **Engine**: PostgreSQL 16+ (Neon)
+- **Migrations**: Alembic
+- **Connection pooling**: asyncpg built-in
+- **Backups**: Neon automated daily
+
+### Infrastructure
+- **Containers**: Docker (Python 3.12, Node 20)
+- **Orchestration**: Kubernetes (namespace: `fatimazehra-ai-tutor`)
+- **Local K8s**: Docker Desktop or Minikube
+- **Secrets**: K8s secrets (no hardcoded keys)
+
+## Development Workflow
+
+1. **Spec → PR review** (user/team approves, no code yet)
+2. **Feature branch** off `main`
+3. **Code + tests** (red-green-refactor cycle)
+4. **Browser-use test** (screenshot proof; if fail → fix → retest)
+5. **pytest/vitest** (all green)
+6. **Commit** (atomic, formatted message)
+7. **Push to main** (auto-merge if tests pass)
+
+## Review & Quality Gates
+
+- **Code review**: All PRs require approval from team; no self-merge.
+- **Tests**: 100% tests must pass; coverage ≥ 80% for backend.
+- **Linting**: Ruff, Pyright, ESLint, TypeScript strict.
+- **Performance**: LCP < 2.5s, CLS < 0.1 (Lighthouse ≥ 90).
+- **Security**: No hardcoded secrets; OWASP Top 10 checked; Dependabot enabled.
+
+## Documentation
+
+- **Code**: Inline comments for non-obvious logic only.
+- **APIs**: OpenAPI schema auto-generated from FastAPI.
+- **README**: Setup, Docker, K8s, troubleshooting.
+- **PHRs**: Every significant decision recorded.
+- **ADRs**: Architectural decisions documented (e.g., auth strategy, data model).
+
+## Deployment
+
+- **Local**: `docker-compose up --build`
+- **K8s**: `kubectl apply -f k8s/`
+- **Rollback**: `kubectl rollout undo deployment/frontend` (immediate)
+- **Monitoring**: Sentry dashboards, Prometheus metrics (Phase 3)
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+**This Constitution is the source of truth.** All decisions align with these principles. Changes to Constitution require team consensus and are documented as amendments. Every developer must read and acknowledge this Constitution before starting.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0 | **Ratified**: 2026-03-23 | **Last Amended**: 2026-03-23
