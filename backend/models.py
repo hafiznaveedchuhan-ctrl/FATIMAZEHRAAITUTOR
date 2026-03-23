@@ -78,7 +78,7 @@ class QuizQuestionResponse(SQLModel):
     """Quiz question response (no answer revealed)"""
     id: str
     question: str
-    options: dict
+    options: list
 
 class QuizAnswer(SQLModel):
     """Single answer submission"""
@@ -93,6 +93,8 @@ class QuizSubmitRequest(SQLModel):
 class QuestionResult(SQLModel):
     """Result for single question"""
     question_id: str
+    question: str
+    options: list
     selected_option: int
     correct_option: int
     explanation: str
@@ -101,6 +103,8 @@ class QuestionResult(SQLModel):
 class QuizSubmitResponse(SQLModel):
     """Quiz submission response"""
     score: int
+    correct_count: int
+    total: int
     passed: bool
     results: list[QuestionResult]
 
