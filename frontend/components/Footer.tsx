@@ -41,11 +41,17 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer className="relative mt-20">
-      {/* Gradient top border */}
-      <div className="h-px bg-gradient-to-r from-transparent via-[#6C63FF] to-transparent" />
-      <div className="h-px bg-gradient-to-r from-transparent via-[#EC4899]/50 to-transparent mt-px" />
+      {/* Multi-color top border — 3 layers */}
+      <div className="h-px bg-gradient-to-r from-[#6C63FF] via-[#EC4899] to-[#06B6D4]" />
+      <div className="h-px bg-gradient-to-r from-[#3B82F6]/60 via-[#F59E0B]/40 to-[#6C63FF]/60 mt-px" />
+      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-px" />
 
-      <div className="bg-surface-950/80 backdrop-blur-sm pt-16 pb-8">
+      <div className="backdrop-blur-xl pt-16 pb-8"
+        style={{
+          background: 'linear-gradient(160deg, rgba(45,0,100,0.92) 0%, rgba(15,8,50,0.95) 30%, rgba(8,18,70,0.95) 60%, rgba(60,5,80,0.92) 100%)',
+          borderTop: 'none',
+        }}
+      >
         <div className="container">
           {/* Main footer grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
@@ -127,7 +133,7 @@ export default function Footer() {
           </div>
 
           {/* Bottom bar */}
-          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
+          <div className="h-px bg-gradient-to-r from-transparent via-[#6C63FF]/40 to-transparent mb-6" />
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
             <p className="flex items-center gap-1">
               &copy; {new Date().getFullYear()} FatimaZehra AI Tutor. Made with

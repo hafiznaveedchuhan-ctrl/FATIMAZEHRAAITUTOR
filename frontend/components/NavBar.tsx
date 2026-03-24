@@ -57,11 +57,18 @@ export default function NavBar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'backdrop-blur-xl bg-black/60 border-b border-white/10 shadow-lg shadow-black/20'
-          : 'backdrop-blur-md bg-black/30 border-b border-white/5'
+          ? 'backdrop-blur-2xl border-b shadow-2xl'
+          : 'backdrop-blur-xl border-b'
       }`}
+      style={{
+        background: scrolled
+          ? 'linear-gradient(135deg, rgba(60,0,120,0.85) 0%, rgba(20,10,60,0.90) 40%, rgba(10,20,80,0.88) 70%, rgba(80,10,80,0.82) 100%)'
+          : 'linear-gradient(135deg, rgba(60,0,120,0.55) 0%, rgba(20,10,60,0.60) 40%, rgba(10,20,80,0.55) 70%, rgba(80,10,80,0.50) 100%)',
+        borderColor: scrolled ? 'rgba(139,92,246,0.40)' : 'rgba(139,92,246,0.20)',
+        boxShadow: scrolled ? '0 4px 40px rgba(108,99,255,0.18), 0 1px 0 rgba(236,72,153,0.15)' : 'none',
+      }}
     >
       <div className="container py-3">
         <div className="flex justify-between items-center">

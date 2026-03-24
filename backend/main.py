@@ -7,8 +7,22 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import os
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from database import init_db, close_db
 from routes import auth_router, chapters_router, quiz_router, progress_router, payment_router
+
+# ── Sentry monitoring (initialised only when DSN is set) ──
+_sentry_dsn = os.getenv("SENTRY_DSN")
+if _sentry_dsn:
+    sentry_sdk.init(
+        dsn=_sentry_dsn,
+        integrations=[FastApiIntegration(), SqlalchemyIntegration()],
+        traces_sample_rate=0.10,
+        environment=os.getenv("ENV", "development"),
+        release="fatimazehra-ai-tutor@1.0.0",
+    )
 
 # Lifecycle manager
 @asynccontextmanager
