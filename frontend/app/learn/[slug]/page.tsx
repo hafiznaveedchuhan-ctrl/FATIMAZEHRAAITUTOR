@@ -67,7 +67,19 @@ export default async function ChapterPage({
   }
 
   const accessToken = (session as any).accessToken || ''
-  const userTier = (session.user as any)?.tier || 'free'
+
+  // Fetch live tier from backend (bypasses stale JWT after upgrade)
+  let userTier = (session.user as any)?.tier || 'free'
+  try {
+    const meRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth/me`,
+      { headers: { Authorization: `Bearer ${accessToken}` }, cache: 'no-store' }
+    )
+    if (meRes.ok) {
+      const me = await meRes.json()
+      userTier = me.tier || userTier
+    }
+  } catch {}
   const userTierLevel = tierHierarchy[userTier] ?? 0
 
   const [chapter, allChapters] = await Promise.all([

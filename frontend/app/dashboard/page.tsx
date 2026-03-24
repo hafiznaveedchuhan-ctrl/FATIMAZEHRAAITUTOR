@@ -125,11 +125,12 @@ export default function DashboardPage() {
 
   const [data, setData] = useState<ProgressData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [liveTier, setLiveTier] = useState<string | null>(null)
 
-  const userTier = (session?.user as any)?.tier || 'free'
-  const userTierLevel = TIER_HIERARCHY[userTier] ?? 0
   const accessToken = (session as any)?.accessToken || ''
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+  const userTier = liveTier ?? (session?.user as any)?.tier ?? 'free'
+  const userTierLevel = TIER_HIERARCHY[userTier] ?? 0
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/auth/login')
@@ -137,11 +138,15 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!session) return
-    fetch(`${apiUrl}/progress/me`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-      .then((r) => r.json())
-      .then((d) => { setData(d); setLoading(false) })
+    Promise.all([
+      fetch(`${apiUrl}/progress/me`, { headers: { Authorization: `Bearer ${accessToken}` } }),
+      fetch(`${apiUrl}/auth/me`, { headers: { Authorization: `Bearer ${accessToken}` } }),
+    ])
+      .then(async ([progressRes, meRes]) => {
+        if (progressRes.ok) setData(await progressRes.json())
+        if (meRes.ok) { const me = await meRes.json(); setLiveTier(me.tier || 'free') }
+        setLoading(false)
+      })
       .catch(() => setLoading(false))
   }, [session, apiUrl, accessToken])
 

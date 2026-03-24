@@ -72,13 +72,26 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id
         token.email = user.email ?? ''
         token.name = user.name ?? ''
         token.accessToken = user.accessToken
         token.tier = user.tier
+      }
+      // Re-fetch live tier from backend when session.update() is called (e.g. after payment)
+      if (trigger === 'update' && token.accessToken) {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth/me`,
+            { headers: { Authorization: `Bearer ${token.accessToken}` } }
+          )
+          if (res.ok) {
+            const me = await res.json()
+            token.tier = me.tier
+          }
+        } catch {}
       }
       return token
     },

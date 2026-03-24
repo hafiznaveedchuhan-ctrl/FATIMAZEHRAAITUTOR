@@ -20,8 +20,22 @@ export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [liveTier, setLiveTier] = useState<string | null>(null)
   const pathname = usePathname()
   const userMenuRef = useRef<HTMLDivElement>(null)
+
+  // Fetch live tier from backend to bypass stale JWT after upgrades
+  useEffect(() => {
+    if (!session) return
+    const accessToken = (session as any)?.accessToken
+    if (!accessToken) return
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth/me`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((me) => { if (me?.tier) setLiveTier(me.tier) })
+      .catch(() => {})
+  }, [session])
 
   // Track scroll for navbar background intensity
   useEffect(() => {
@@ -50,8 +64,8 @@ export default function NavBar() {
 
   const isActive = (href: string) => pathname === href
 
-  // User tier (default to free if not available)
-  const userTier = (session?.user as { tier?: string } | undefined)?.tier || 'free'
+  // User tier: prefer live tier from backend (bypasses stale JWT after upgrade)
+  const userTier = liveTier ?? (session?.user as { tier?: string } | undefined)?.tier ?? 'free'
   const tier = tierConfig[userTier as keyof typeof tierConfig] || tierConfig.free
   const TierIcon = tier.icon
 
