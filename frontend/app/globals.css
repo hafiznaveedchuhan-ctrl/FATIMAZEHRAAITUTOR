@@ -5,6 +5,14 @@
 /* Prism syntax highlighting theme (dark) */
 @import 'prismjs/themes/prism-tomorrow.css';
 
+:root {
+  --accent: #6C63FF;
+  --pink: #EC4899;
+  --blue: #3B82F6;
+  --cyan: #06B6D4;
+  --gold: #F59E0B;
+}
+
 @layer base {
   html {
     @apply scroll-smooth;
@@ -42,6 +50,155 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ===== Animated Gradient Blob ===== */
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+/* ===== Float Animation ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ===== Bounce Scroll Indicator ===== */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+/* ===== Pulse Glow ===== */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(108, 99, 255, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(108, 99, 255, 0.6), 0 0 60px rgba(236, 72, 153, 0.2); }
+}
+
+/* ===== Gradient Shift ===== */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== Shimmer ===== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ===== Spin Slow ===== */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #6C63FF, #EC4899, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #F59E0B, #EC4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-purple { box-shadow: 0 0 30px rgba(108, 99, 255, 0.4); }
+.glow-pink { box-shadow: 0 0 30px rgba(236, 72, 153, 0.4); }
+.glow-blue { box-shadow: 0 0 30px rgba(59, 130, 246, 0.4); }
+.glow-cyan { box-shadow: 0 0 30px rgba(6, 182, 212, 0.4); }
+
+/* Glass card */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient border utility */
+.gradient-border {
+  position: relative;
+  background: #111113;
+  border-radius: 16px;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #6C63FF, #EC4899, #3B82F6);
+  z-index: -1;
+}
+
+/* Gradient border glow on hover */
+.gradient-border-hover {
+  position: relative;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+.gradient-border-hover::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #6C63FF, #EC4899, #3B82F6);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.gradient-border-hover:hover::before {
+  opacity: 1;
+}
+
+/* Animation classes */
+.animate-blob { animation: blob 7s infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-bounce-slow { animation: bounce-slow 2s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+.animate-spin-slow { animation: spin-slow 8s linear infinite; }
+
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+.animation-delay-1000 { animation-delay: 1s; }
+.animation-delay-3000 { animation-delay: 3s; }
+.animation-delay-500 { animation-delay: 0.5s; }
+
+/* Nav link animated underline */
+.nav-link-underline {
+  position: relative;
+}
+.nav-link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #6C63FF, #EC4899);
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+.nav-link-underline:hover::after,
+.nav-link-underline.active::after {
+  width: 100%;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -76,4 +233,63 @@ html.light ::-webkit-scrollbar-thumb {
 
 html.light ::-webkit-scrollbar-thumb:hover {
   background: #9CA3AF;
+}
+
+/* Pricing card popular glow */
+.pricing-popular {
+  box-shadow:
+    0 0 30px rgba(108, 99, 255, 0.3),
+    0 0 60px rgba(108, 99, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Feature card hover glow */
+.feature-card-glow:hover {
+  box-shadow:
+    0 0 30px rgba(108, 99, 255, 0.15),
+    0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Gradient CTA button */
+.btn-gradient {
+  background: linear-gradient(135deg, #6C63FF, #EC4899);
+  transition: all 0.3s ease;
+}
+.btn-gradient:hover {
+  background: linear-gradient(135deg, #7C73FF, #F472B6);
+  box-shadow: 0 0 30px rgba(108, 99, 255, 0.4), 0 0 60px rgba(236, 72, 153, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Glass button */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Timeline connector */
+.timeline-connector {
+  position: relative;
+}
+.timeline-connector::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -2rem;
+  width: 4rem;
+  height: 2px;
+  background: linear-gradient(90deg, #6C63FF, #EC4899);
+}
+@media (max-width: 768px) {
+  .timeline-connector::after {
+    display: none;
+  }
 }
