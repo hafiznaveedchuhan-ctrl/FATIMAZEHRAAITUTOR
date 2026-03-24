@@ -163,11 +163,12 @@ export default function ChatPage() {
   const [chapters, setChapters] = useState<Chapter[]>([])
   const [msgCount, setMsgCount] = useState(0)
   const [error, setError] = useState('')
+  const [liveTier, setLiveTier] = useState<string | null>(null)
 
   const bottomRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const userTier: string = (session?.user as any)?.tier || 'free'
+  const userTier: string = liveTier ?? (session?.user as any)?.tier ?? 'free'
   const limit = TIER_LIMITS[userTier] ?? 5
   const remaining = Math.max(0, limit - msgCount)
   const isAtLimit = limit !== Infinity && msgCount >= limit
@@ -183,13 +184,23 @@ export default function ChatPage() {
     if (ctx) setContext(ctx)
   }, [searchParams])
 
-  // Fetch chapter list for context selector
+  // Fetch chapter list + live tier
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chapters`)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    fetch(`${apiUrl}/chapters`)
       .then((r) => r.json())
       .then(setChapters)
       .catch(() => {})
-  }, [])
+    if (session) {
+      const accessToken = (session as any)?.accessToken
+      if (accessToken) {
+        fetch(`${apiUrl}/auth/me`, { headers: { Authorization: `Bearer ${accessToken}` } })
+          .then((r) => r.ok ? r.json() : null)
+          .then((me) => { if (me?.tier) setLiveTier(me.tier) })
+          .catch(() => {})
+      }
+    }
+  }, [session])
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
