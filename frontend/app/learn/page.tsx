@@ -21,6 +21,7 @@ export default function LearnPage() {
   const router = useRouter()
   const [chapters, setChapters] = useState<Chapter[]>([])
   const [loading, setLoading] = useState(true)
+  const [liveTier, setLiveTier] = useState<string>('free')
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -29,34 +30,32 @@ export default function LearnPage() {
   }, [status, router])
 
   useEffect(() => {
-    const fetchChapters = async () => {
+    const fetchData = async () => {
+      const accessToken = (session as any)?.accessToken || ''
+      const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chapters`,
-          {
-            headers: {
-              'Authorization': `Bearer ${(session as any)?.accessToken || ''}`,
-            },
-          }
-        )
-        if (response.ok) {
-          const data = await response.json()
-          setChapters(data)
+        // Fetch live tier from backend (bypasses stale JWT)
+        const [chaptersRes, meRes] = await Promise.all([
+          fetch(`${API}/chapters`, { headers: { Authorization: `Bearer ${accessToken}` } }),
+          fetch(`${API}/auth/me`,  { headers: { Authorization: `Bearer ${accessToken}` } }),
+        ])
+        if (chaptersRes.ok) setChapters(await chaptersRes.json())
+        if (meRes.ok) {
+          const me = await meRes.json()
+          setLiveTier(me.tier || 'free')
         }
       } catch (error) {
-        console.error('Failed to fetch chapters:', error)
+        console.error('Failed to fetch data:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    if (session) {
-      fetchChapters()
-    }
+    if (session) fetchData()
   }, [session])
 
   const tier_hierarchy = { free: 0, premium: 1, pro: 2 }
-  const user_tier_level = tier_hierarchy[session?.user?.tier as keyof typeof tier_hierarchy] || 0
+  const user_tier_level = tier_hierarchy[liveTier as keyof typeof tier_hierarchy] || 0
 
   const isChapterLocked = (tier_required: string) => {
     const required_level = tier_hierarchy[tier_required as keyof typeof tier_hierarchy] || 0
@@ -84,7 +83,7 @@ export default function LearnPage() {
           <h1 className="text-4xl font-bold mb-4">Learn Python</h1>
           <p className="text-gray-400 max-w-2xl">
             Master Python with 10 comprehensive chapters covering everything from basics to advanced concepts.
-            {session?.user?.tier === 'free' && (
+            {liveTier === 'free' && (
               <> Upgrade to Premium to unlock all chapters and AI assistance.</>
             )}
           </p>
@@ -159,7 +158,7 @@ export default function LearnPage() {
         )}
 
         {/* Upgrade CTA for free users */}
-        {session?.user?.tier === 'free' && chapters.length > 0 && (
+        {liveTier === 'free' && chapters.length > 0 && (
           <div className="mt-12 bg-indigo-600/20 border border-indigo-500/50 rounded-lg p-8 text-center">
             <h3 className="text-2xl font-bold mb-2">Unlock All Chapters</h3>
             <p className="text-gray-300 mb-6">

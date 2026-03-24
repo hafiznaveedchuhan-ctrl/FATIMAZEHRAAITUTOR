@@ -8,6 +8,9 @@ from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configuration
 SECRET_KEY = os.getenv("NEXTAUTH_SECRET", "your-secret-key-change-in-production")

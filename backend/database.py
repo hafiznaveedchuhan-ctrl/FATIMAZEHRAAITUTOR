@@ -7,6 +7,10 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 import os
 from typing import AsyncGenerator
+from dotenv import load_dotenv
+
+# Load .env file so os.getenv picks up DATABASE_URL etc.
+load_dotenv()
 
 # Database URL from environment
 DATABASE_URL = os.getenv(

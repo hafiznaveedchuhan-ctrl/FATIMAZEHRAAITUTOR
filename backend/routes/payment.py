@@ -49,6 +49,10 @@ class CreateSessionResponse(BaseModel):
     session_url: str
     session_id: str
 
+class ActivatePlanRequest(BaseModel):
+    plan: str
+    stripe_session_id: str
+
 
 # ── POST /payment/create-session ─────────────────────────────────────────────
 @router.post("/create-session", response_model=CreateSessionResponse)
@@ -117,6 +121,65 @@ async def create_checkout_session(
         session_url=checkout_session.url,
         session_id=checkout_session.id,
     )
+
+
+# ── POST /payment/activate-plan ──────────────────────────────────────────────
+@router.post("/activate-plan")
+async def activate_plan(
+    body: ActivatePlanRequest,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    """
+    Called from the success page after Stripe checkout.
+    Frontend has already verified the session with Stripe — this just updates the DB.
+    """
+    if body.plan not in ["premium", "pro"]:
+        raise HTTPException(status_code=400, detail="Invalid plan")
+
+    # Verify session with Stripe to prevent abuse
+    try:
+        checkout_session = stripe.checkout.Session.retrieve(body.stripe_session_id)
+        if checkout_session.payment_status != "paid":
+            raise HTTPException(status_code=400, detail="Payment not completed")
+        # Confirm the session belongs to this user
+        session_plan = checkout_session.metadata.get("plan", "")
+        if session_plan != body.plan:
+            raise HTTPException(status_code=400, detail="Plan mismatch")
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    # Upgrade user tier
+    current_user.tier = body.plan
+    current_user.updated_at = datetime.utcnow()
+    session.add(current_user)
+
+    # Upsert subscription record
+    stmt = select(Subscription).where(Subscription.user_id == current_user.id)
+    result = await session.execute(stmt)
+    sub = result.scalars().first()
+
+    stripe_customer_id = checkout_session.customer
+    stripe_subscription_id = checkout_session.subscription
+
+    if sub:
+        sub.plan = body.plan
+        sub.status = "active"
+        sub.stripe_customer_id = stripe_customer_id
+        sub.stripe_subscription_id = stripe_subscription_id
+        sub.updated_at = datetime.utcnow()
+    else:
+        sub = Subscription(
+            user_id=current_user.id,
+            stripe_customer_id=stripe_customer_id,
+            stripe_subscription_id=stripe_subscription_id,
+            plan=body.plan,
+            status="active",
+        )
+    session.add(sub)
+    await session.commit()
+
+    return {"plan": body.plan, "status": "activated"}
 
 
 # ── POST /payment/webhook ────────────────────────────────────────────────────

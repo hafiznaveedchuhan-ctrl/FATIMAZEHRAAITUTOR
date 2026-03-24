@@ -116,12 +116,9 @@ export default function PricingPage() {
     setError(null)
 
     try {
-      const res = await fetch(`${API_URL}/payment/create-session`, {
+      const res = await fetch(`/api/payment/create-session`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan }),
       })
 
