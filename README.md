@@ -18,6 +18,7 @@ A world-class Python learning platform powered by AI coaching. Learn 10 chapters
 ✅ **Payments**: Stripe checkout, tier upgrades (Free, Premium $9.99, Pro $19.99)
 ✅ **Dark/Light Mode**: Beautiful UI with WCAG AA accessibility
 ✅ **Responsive**: Mobile-first design (all breakpoints tested)
+✅ **Profile Page**: Account details, subscription info, password change
 
 ### Phase 2: AI Personalization (Planned)
 🔜 **Weak-Point Analysis**: GPT-4 reads quiz history, identifies gaps
@@ -26,7 +27,7 @@ A world-class Python learning platform powered by AI coaching. Learn 10 chapters
 🔜 **Email Coach**: Weekly progress summaries + tips
 
 ### Phase 3: Production Ready (In Progress)
-✅ **Docker & Kubernetes**: Dockerfiles, docker-compose dev/prod, full K8s manifests (namespace, deployments, services, ingress, HPA)
+✅ **Docker & Kubernetes**: Dockerfiles, docker-compose dev/prod, full K8s manifests (namespace, deployments, services, ingress, HPA — frontend + backend)
 🔜 **Admin Dashboard**: Analytics, revenue, user metrics
 🔜 **SEO & Performance**: Lighthouse ≥ 90, sitemap, metadata
 🔜 **Monitoring**: Sentry error tracking, custom metrics
@@ -225,6 +226,11 @@ POST /auth/login
 GET /auth/me
   Headers: Authorization: Bearer {token}
   Response: { user_id, email, name, tier, subscription_expires_at }
+
+POST /auth/change-password
+  Headers: Authorization: Bearer {token}
+  Body: { current_password, new_password }
+  Response: { message }
 ```
 
 ### Chapters

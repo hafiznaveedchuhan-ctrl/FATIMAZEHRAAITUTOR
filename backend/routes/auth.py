@@ -3,6 +3,8 @@ Authentication routes for FatimaZehra-AI-Tutor
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status, Header
+from pydantic import BaseModel
+from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlmodel import Session
@@ -183,3 +185,47 @@ async def logout():
     Logout (client should clear token)
     """
     return {"message": "Logged out successfully"}
+
+
+# ==================== Change Password ====================
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+
+@router.post("/change-password")
+async def change_password(
+    body: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    """
+    Change the authenticated user's password.
+    Verifies current password before updating.
+    """
+    # OAuth users may not have a password
+    if not current_user.hashed_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password change is not available for OAuth accounts.",
+        )
+
+    # Verify current password
+    if not verify_password(body.current_password, current_user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Current password is incorrect.",
+        )
+
+    # Validate new password strength
+    is_valid, error_msg = validate_password_strength(body.new_password)
+    if not is_valid:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_msg)
+
+    # Update password
+    current_user.hashed_password = hash_password(body.new_password)
+    current_user.updated_at = datetime.utcnow()
+    session.add(current_user)
+    await session.commit()
+
+    return {"message": "Password updated successfully."}

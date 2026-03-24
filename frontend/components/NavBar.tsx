@@ -186,6 +186,13 @@ export default function NavBar() {
                       >
                         My Courses
                       </Link>
+                      <Link
+                        href="/profile"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        Profile & Settings
+                      </Link>
                       {userTier === 'free' && (
                         <Link
                           href="/pricing"
