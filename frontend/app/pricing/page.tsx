@@ -136,13 +136,13 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-white">
+    <div className="min-h-screen bg-transparent text-white">
       {/* ── Header ── */}
       <div className="pt-20 pb-12 text-center px-4">
         <span className="inline-block bg-[#6C63FF]/20 text-[#6C63FF] text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-widest">
           Pricing
         </span>
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
           Choose Your Learning Plan
         </h1>
         <p className="text-gray-400 max-w-xl mx-auto text-lg">
@@ -183,11 +183,11 @@ export default function PricingPage() {
             return (
               <div
                 key={tier.id}
-                className={`relative rounded-2xl border p-8 flex flex-col transition-all ${
+                className={`relative rounded-2xl border p-8 flex flex-col transition-all duration-300 hover:scale-[1.02] ${
                   tier.highlight
-                    ? 'border-[#6C63FF] bg-[#111113] shadow-[0_0_40px_rgba(108,99,255,0.15)]'
-                    : 'border-[#1F1F23] bg-[#111113]'
-                } ${isCurrent ? 'ring-2 ring-green-500/50' : ''}`}
+                    ? 'border-[#6C63FF]/60 glass pricing-popular'
+                    : 'border-white/10 glass'
+                } ${isCurrent ? 'ring-2 ring-emerald-500/50' : ''}`}
               >
                 {/* Badge */}
                 {tier.badge && (
@@ -225,7 +225,7 @@ export default function PricingPage() {
                   ) : (
                     <Link
                       href={tier.ctaHref!}
-                      className="w-full py-3 rounded-xl bg-[#1F1F23] hover:bg-[#2a2a2f] text-white font-semibold text-sm text-center transition-colors mb-6 block"
+                      className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm text-center transition-all mb-6 block"
                     >
                       {tier.cta}
                     </Link>
@@ -243,8 +243,8 @@ export default function PricingPage() {
                     disabled={loading === tier.id}
                     className={`w-full py-3 rounded-xl font-semibold text-sm transition-all mb-6 ${
                       tier.highlight
-                        ? 'bg-[#6C63FF] hover:bg-[#5a52d5] text-white'
-                        : 'bg-[#1F1F23] hover:bg-[#2a2a2f] text-white'
+                        ? 'btn-gradient text-white'
+                        : 'bg-white/5 hover:bg-white/10 border border-white/10 text-white'
                     } disabled:opacity-60 disabled:cursor-not-allowed`}
                   >
                     {loading === tier.id ? (
@@ -262,7 +262,7 @@ export default function PricingPage() {
                 ) : (
                   <button
                     disabled
-                    className="w-full py-3 rounded-xl bg-[#1F1F23] text-gray-500 font-semibold text-sm cursor-default mb-6"
+                    className="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-gray-500 font-semibold text-sm cursor-default mb-6"
                   >
                     Downgrade not available
                   </button>
@@ -294,18 +294,18 @@ export default function PricingPage() {
 
         {/* ── FAQ ── */}
         <div className="mt-20 max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">
+          <h2 className="text-2xl font-bold text-center mb-8 gradient-text">
             Frequently Asked Questions
           </h2>
           <div className="space-y-3">
             {FAQ.map((item, i) => (
               <div
                 key={i}
-                className="border border-[#1F1F23] rounded-xl overflow-hidden"
+                className="border border-white/10 rounded-xl overflow-hidden glass"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-[#111113] transition-colors"
+                  className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-white/5 transition-colors"
                 >
                   <span className="font-medium text-sm">{item.q}</span>
                   <svg

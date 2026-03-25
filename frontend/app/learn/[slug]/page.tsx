@@ -101,7 +101,7 @@ export default async function ChapterPage({
   // Tier gate: show upgrade prompt
   if (chapter.error === 'forbidden') {
     return (
-      <div className="min-h-screen bg-surface-950 text-white">
+      <div className="min-h-screen bg-transparent text-white">
         <NavBar />
         <div className="container py-24 text-center">
           <div className="max-w-md mx-auto">
@@ -113,7 +113,7 @@ export default async function ChapterPage({
             <div className="flex gap-4 justify-center">
               <Link
                 href="/learn"
-                className="border border-surface-700 text-gray-400 hover:text-white hover:border-surface-500 font-semibold py-3 px-6 rounded-lg transition"
+                className="border border-white/10 text-gray-400 hover:text-white hover:border-white/20 font-semibold py-3 px-6 rounded-lg transition"
               >
                 Back to Chapters
               </Link>
@@ -132,12 +132,12 @@ export default async function ChapterPage({
   }
 
   return (
-    <div className="min-h-screen bg-surface-950 text-white">
+    <div className="min-h-screen bg-transparent text-white">
       <NavBar />
 
       <div className="flex">
         {/* Sidebar: Chapter Navigation */}
-        <aside className="w-64 hidden lg:block border-r border-surface-700 bg-surface-900/50 p-4 sticky top-16 h-[calc(100vh-64px)] overflow-y-auto">
+        <aside className="w-64 hidden lg:block border-r border-white/10 bg-white/[0.03] backdrop-blur-xl p-4 sticky top-16 h-[calc(100vh-64px)] overflow-y-auto">
           <Link
             href="/learn"
             className="flex items-center gap-2 text-gray-500 hover:text-white text-sm mb-5 transition"
@@ -177,14 +177,14 @@ export default async function ChapterPage({
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition ${
                     isCurrent
                       ? 'bg-indigo-500/20 text-indigo-400 font-medium'
-                      : 'text-gray-400 hover:text-white hover:bg-surface-700'
+                      : 'text-gray-400 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   <span
                     className={`w-5 h-5 flex-shrink-0 flex items-center justify-center text-xs rounded-full font-bold ${
                       isCurrent
                         ? 'bg-indigo-500 text-white'
-                        : 'bg-surface-700 text-gray-400'
+                        : 'bg-white/10 text-gray-400'
                     }`}
                   >
                     {ch.number}
@@ -212,12 +212,12 @@ export default async function ChapterPage({
             prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
             prose-p:text-gray-300 prose-p:leading-relaxed
             prose-strong:text-white
-            prose-code:text-indigo-300 prose-code:bg-surface-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
-            prose-pre:bg-surface-800 prose-pre:border prose-pre:border-surface-700 prose-pre:rounded-lg prose-pre:p-4
+            prose-code:text-indigo-300 prose-code:bg-white/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+            prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10 prose-pre:rounded-lg prose-pre:p-4
             prose-li:text-gray-300
             prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline
             prose-blockquote:border-indigo-500 prose-blockquote:text-gray-400
-            prose-hr:border-surface-700
+            prose-hr:border-white/10
           ">
             <MDXRemote
               source={chapter.content_mdx!}
@@ -258,7 +258,7 @@ export default async function ChapterPage({
           </div>
 
           {/* Prev / Next Navigation */}
-          <div className="mt-10 flex justify-between items-center border-t border-surface-700 pt-8">
+          <div className="mt-10 flex justify-between items-center border-t border-white/10 pt-8">
             {prevChapter ? (
               <Link
                 href={`/learn/${prevChapter.slug}`}

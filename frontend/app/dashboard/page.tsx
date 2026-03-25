@@ -91,14 +91,14 @@ function StatCard({
 }) {
   const count = useCountUp(value)
   return (
-    <div className="bg-surface-900 border border-surface-700 rounded-xl p-5">
+    <div className="glass border border-white/10 rounded-xl p-5 hover:scale-[1.02] transition-all duration-300">
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${accent}`}>
         <Icon className="w-5 h-5" />
       </div>
       <p className="text-2xl font-black text-white">
         {count}{sub}
       </p>
-      <p className="text-sm text-gray-500 mt-0.5">{label}</p>
+      <p className="text-sm text-gray-400 mt-0.5">{label}</p>
     </div>
   )
 }
@@ -108,7 +108,7 @@ function StatCard({
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-surface-800 border border-surface-700 rounded-lg px-3 py-2 text-xs">
+    <div className="glass border border-white/10 rounded-lg px-3 py-2 text-xs">
       <p className="font-medium text-white">{payload[0].payload.title}</p>
       <p className="text-indigo-400 mt-0.5">{payload[0].value}% score</p>
     </div>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-surface-950 flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -172,7 +172,7 @@ export default function DashboardPage() {
     }))
 
   return (
-    <div className="min-h-screen bg-surface-950 text-white">
+    <div className="min-h-screen bg-transparent text-white">
       <NavBar />
 
       <div className="container py-10">
@@ -180,7 +180,7 @@ export default function DashboardPage() {
         {/* ── Welcome Header ──────────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-3xl font-bold gradient-text">
               Welcome back, {session?.user?.name?.split(' ')[0]} 👋
             </h1>
             <p className="text-gray-400 mt-1">Here&apos;s your learning progress</p>
@@ -236,7 +236,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Overall Progress Bar ─────────────────────────────────────────── */}
-        <div className="bg-surface-900 border border-surface-700 rounded-xl p-5 mb-10">
+        <div className="glass border border-white/10 rounded-xl p-5 mb-10">
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm font-medium flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-indigo-400" />
@@ -246,9 +246,9 @@ export default function DashboardPage() {
               {stats?.completion_pct ?? 0}%
             </span>
           </div>
-          <div className="w-full bg-surface-700 rounded-full h-3">
+          <div className="w-full bg-white/10 rounded-full h-3">
             <div
-              className="h-3 rounded-full bg-gradient-to-r from-indigo-600 to-indigo-400 transition-all duration-1000"
+              className="h-3 rounded-full bg-gradient-to-r from-[#6C63FF] via-[#EC4899] to-[#3B82F6] transition-all duration-1000"
               style={{ width: `${stats?.completion_pct ?? 0}%` }}
             />
           </div>
@@ -278,19 +278,19 @@ export default function DashboardPage() {
                 return (
                   <div
                     key={ch.id}
-                    className={`bg-surface-900 border rounded-xl p-4 flex items-center gap-4 ${
-                      locked ? 'border-surface-700/50 opacity-60' : 'border-surface-700'
+                    className={`glass border rounded-xl p-4 flex items-center gap-4 transition-all duration-200 hover:bg-white/[0.07] ${
+                      locked ? 'border-white/5 opacity-60' : 'border-white/10'
                     }`}
                   >
                     {/* Status icon */}
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
                       locked
-                        ? 'bg-surface-700'
+                        ? 'bg-white/10'
                         : ch.completed
-                        ? 'bg-green-500/20'
+                        ? 'bg-emerald-500/20'
                         : ch.attempts > 0
                         ? 'bg-yellow-500/20'
-                        : 'bg-surface-700'
+                        : 'bg-white/10'
                     }`}>
                       {locked ? (
                         <Lock className="w-4 h-4 text-gray-600" />
@@ -308,10 +308,10 @@ export default function DashboardPage() {
                         {/* Score bar */}
                         {ch.best_score !== null ? (
                           <div className="flex items-center gap-2 flex-1">
-                            <div className="flex-1 bg-surface-700 rounded-full h-1.5">
+                            <div className="flex-1 bg-white/10 rounded-full h-1.5">
                               <div
                                 className={`h-1.5 rounded-full ${
-                                  ch.best_score >= 70 ? 'bg-green-500' : 'bg-yellow-500'
+                                  ch.best_score >= 70 ? 'bg-emerald-500' : 'bg-yellow-500'
                                 }`}
                                 style={{ width: `${ch.best_score}%` }}
                               />
@@ -347,7 +347,7 @@ export default function DashboardPage() {
           <div className="lg:col-span-2 space-y-6">
 
             {/* Quiz Scores Chart */}
-            <div className="bg-surface-900 border border-surface-700 rounded-xl p-5">
+            <div className="glass border border-white/10 rounded-xl p-5">
               <h2 className="text-base font-bold mb-4 flex items-center gap-2">
                 <Target className="w-4 h-4 text-indigo-400" />
                 Quiz Scores
@@ -408,7 +408,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-surface-900 border border-surface-700 rounded-xl p-5">
+            <div className="glass border border-white/10 rounded-xl p-5">
               <h2 className="text-base font-bold mb-4 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-indigo-400" />
                 Recent Activity
@@ -446,12 +446,12 @@ export default function DashboardPage() {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-surface-900 border border-surface-700 rounded-xl p-5">
+            <div className="glass border border-white/10 rounded-xl p-5">
               <h2 className="text-base font-bold mb-3">Quick Actions</h2>
               <div className="space-y-2">
                 <Link
                   href="/learn"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-700 transition group"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition group"
                 >
                   <BookOpen className="w-4 h-4 text-indigo-400" />
                   <span className="text-sm">Continue Learning</span>
@@ -459,7 +459,7 @@ export default function DashboardPage() {
                 </Link>
                 <Link
                   href="/chat"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-surface-700 transition group"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition group"
                 >
                   <MessageSquare className="w-4 h-4 text-indigo-400" />
                   <span className="text-sm">Ask AI Tutor</span>

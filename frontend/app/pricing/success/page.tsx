@@ -30,10 +30,10 @@ export default function PaymentSuccessPage() {
   }, [session_id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-white flex items-center justify-center px-4">
-      <div className="max-w-md w-full text-center">
+    <div className="min-h-screen bg-transparent text-white flex items-center justify-center px-4">
+      <div className="max-w-md w-full text-center glass rounded-2xl p-10">
         {/* Icon */}
-        <div className="w-24 h-24 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center mx-auto mb-6">
+        <div className="w-24 h-24 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-6 animate-pulse-glow" style={{ boxShadow: '0 0 30px rgba(16, 185, 129, 0.3)' }}>
           {status === 'loading' ? (
             <div className="w-10 h-10 border-4 border-green-400/30 border-t-green-400 rounded-full animate-spin" />
           ) : (
@@ -43,7 +43,7 @@ export default function PaymentSuccessPage() {
           )}
         </div>
 
-        <h1 className="text-3xl font-bold mb-3">Payment Successful!</h1>
+        <h1 className="text-3xl font-bold mb-3 gradient-text">Payment Successful!</h1>
         <p className="text-gray-400 mb-2">
           {status === 'loading'
             ? 'Activating your plan...'
@@ -52,10 +52,10 @@ export default function PaymentSuccessPage() {
 
         {status === 'done' && (
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-            <Link href="/learn" className="px-6 py-3 bg-[#6C63FF] hover:bg-[#5a52d5] text-white rounded-xl font-semibold transition-colors">
+            <Link href="/learn" className="px-6 py-3 btn-gradient text-white rounded-xl font-semibold transition-all">
               Start Learning
             </Link>
-            <Link href="/dashboard" className="px-6 py-3 bg-[#1F1F23] hover:bg-[#2a2a2f] text-white rounded-xl font-semibold transition-colors">
+            <Link href="/dashboard" className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-semibold transition-all">
               View Dashboard
             </Link>
           </div>

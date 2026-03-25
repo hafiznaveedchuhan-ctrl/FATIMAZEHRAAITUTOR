@@ -74,8 +74,8 @@ function CodeBlock({ lang, value }: { lang: string; value: string }) {
   }
 
   return (
-    <div className="my-3 rounded-lg overflow-hidden border border-surface-700">
-      <div className="flex items-center justify-between bg-surface-800 px-4 py-2">
+    <div className="my-3 rounded-lg overflow-hidden border border-white/10">
+      <div className="flex items-center justify-between bg-white/5 px-4 py-2">
         <span className="text-xs text-indigo-400 font-mono font-semibold">{lang}</span>
         <button
           onClick={copy}
@@ -128,7 +128,7 @@ function MessageContent({ content, isStreaming }: { content: string; isStreaming
             className="text-sm leading-relaxed text-gray-200 whitespace-pre-wrap"
             dangerouslySetInnerHTML={{
               __html: seg.value
-                .replace(/`([^`]+)`/g, '<code class="bg-surface-800 text-indigo-300 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
+                .replace(/`([^`]+)`/g, '<code class="bg-white/10 text-indigo-300 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
                 .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*([^*]+)\*/g, '<em>$1</em>'),
             }}
@@ -283,19 +283,19 @@ export default function ChatPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-surface-950 flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="h-screen flex flex-col bg-surface-950 text-white">
+    <div className="h-screen flex flex-col bg-transparent text-white">
       <NavBar />
 
       <div className="flex flex-1 overflow-hidden">
         {/* ── Sidebar ── */}
-        <aside className="w-64 hidden md:flex flex-col border-r border-surface-700 bg-surface-900/50 p-4">
+        <aside className="w-64 hidden md:flex flex-col border-r border-white/10 bg-white/[0.03] backdrop-blur-xl p-4">
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-1">
               <Sparkles className="w-4 h-4 text-indigo-400" />
@@ -305,7 +305,7 @@ export default function ChatPage() {
           </div>
 
           {/* Tier badge + message count */}
-          <div className="bg-surface-800 border border-surface-700 rounded-lg p-3 mb-5">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-3 mb-5">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-gray-400 capitalize">{userTier} plan</span>
               <span
@@ -330,7 +330,7 @@ export default function ChatPage() {
                     {msgCount} / {limit}
                   </span>
                 </div>
-                <div className="w-full bg-surface-700 rounded-full h-1.5">
+                <div className="w-full bg-white/10 rounded-full h-1.5">
                   <div
                     className={`h-1.5 rounded-full transition-all ${
                       remaining === 0 ? 'bg-red-500' : 'bg-indigo-500'
@@ -351,7 +351,7 @@ export default function ChatPage() {
             <select
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="w-full bg-surface-800 border border-surface-700 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500 transition"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500 transition"
             >
               <option value="">General Python</option>
               {chapters.map((ch) => (
@@ -406,7 +406,7 @@ export default function ChatPage() {
                     className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                       msg.role === 'assistant'
                         ? 'bg-indigo-500/20 text-indigo-400'
-                        : 'bg-surface-700 text-gray-400'
+                        : 'bg-white/10 text-gray-400'
                     }`}
                   >
                     {msg.role === 'assistant' ? (
@@ -420,8 +420,8 @@ export default function ChatPage() {
                   <div
                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                       msg.role === 'user'
-                        ? 'bg-indigo-500 text-white rounded-tr-sm'
-                        : 'bg-surface-800 border border-surface-700 rounded-tl-sm'
+                        ? 'bg-gradient-to-r from-[#6C63FF] to-[#EC4899] text-white rounded-tr-sm'
+                        : 'glass border border-white/10 rounded-tl-sm'
                     }`}
                   >
                     {msg.role === 'user' ? (
@@ -467,13 +467,13 @@ export default function ChatPage() {
           </div>
 
           {/* ── Input Area ── */}
-          <div className="border-t border-surface-700 bg-surface-900/80 px-4 py-4">
+          <div className="border-t border-white/10 bg-white/[0.03] backdrop-blur-xl px-4 py-4">
             {/* Mobile context selector */}
             <div className="md:hidden mb-3">
               <select
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
-                className="w-full bg-surface-800 border border-surface-700 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
               >
                 <option value="">General Python</option>
                 {chapters.map((ch) => (
@@ -497,7 +497,7 @@ export default function ChatPage() {
                     : 'Ask about Python… (Enter to send, Shift+Enter for newline)'
                 }
                 rows={1}
-                className="flex-1 bg-surface-800 border border-surface-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-indigo-500 resize-none transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-indigo-500 resize-none transition disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ minHeight: '48px', maxHeight: '160px' }}
               />
               <button

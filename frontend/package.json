@@ -14,7 +14,7 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
-    "@sentry/nextjs": "^7.86.0",
+    "@sentry/nextjs": "^7.120.4",
     "autoprefixer": "^10.4.16",
     "framer-motion": "^10.16.16",
     "lucide-react": "^0.292.0",

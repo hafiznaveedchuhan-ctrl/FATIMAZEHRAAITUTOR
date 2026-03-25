@@ -107,7 +107,7 @@ export default function ProfilePage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-surface-950 flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -119,17 +119,17 @@ export default function ProfilePage() {
   const isOAuth = !(session?.user as any)?.email?.includes('@') === false && !(accessToken)
 
   return (
-    <div className="min-h-screen bg-surface-950 text-white">
+    <div className="min-h-screen bg-transparent text-white">
       <NavBar />
 
       <div className="container py-12 max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">My Profile</h1>
+        <h1 className="text-3xl font-bold mb-8 gradient-text">My Profile</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* ── Left: Avatar + tier ────────────────────────────────────── */}
           <div className="md:col-span-1">
-            <div className="bg-surface-900 border border-surface-700 rounded-2xl p-6 text-center">
+            <div className="glass border border-white/10 rounded-2xl p-6 text-center">
               {/* Avatar */}
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#6C63FF] to-[#EC4899] flex items-center justify-center text-white text-3xl font-black mx-auto mb-4 shadow-lg shadow-purple-500/20">
                 {me?.name?.charAt(0)?.toUpperCase() || 'U'}
@@ -166,18 +166,18 @@ export default function ProfilePage() {
           <div className="md:col-span-2 space-y-5">
 
             {/* Account info */}
-            <div className="bg-surface-900 border border-surface-700 rounded-2xl p-6">
+            <div className="glass border border-white/10 rounded-2xl p-6">
               <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                 <User className="w-4 h-4" /> Account Details
               </h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between py-2 border-b border-surface-700">
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
                   <div className="flex items-center gap-2 text-sm text-gray-400">
                     <User className="w-4 h-4" /> Full Name
                   </div>
                   <span className="text-sm text-white font-medium">{me?.name || '—'}</span>
                 </div>
-                <div className="flex items-center justify-between py-2 border-b border-surface-700">
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
                   <div className="flex items-center gap-2 text-sm text-gray-400">
                     <Mail className="w-4 h-4" /> Email
                   </div>
@@ -196,23 +196,23 @@ export default function ProfilePage() {
             </div>
 
             {/* Subscription */}
-            <div className="bg-surface-900 border border-surface-700 rounded-2xl p-6">
+            <div className="glass border border-white/10 rounded-2xl p-6">
               <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                 <CreditCard className="w-4 h-4" /> Subscription
               </h3>
               {sub ? (
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between py-2 border-b border-surface-700">
+                  <div className="flex items-center justify-between py-2 border-b border-white/10">
                     <span className="text-sm text-gray-400">Status</span>
                     <span className={`text-sm font-medium capitalize ${sub.status === 'active' ? 'text-green-400' : 'text-red-400'}`}>
                       {sub.status}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between py-2 border-b border-surface-700">
+                  <div className="flex items-center justify-between py-2 border-b border-white/10">
                     <span className="text-sm text-gray-400">Plan</span>
                     <span className="text-sm font-medium capitalize text-white">{sub.plan}</span>
                   </div>
-                  <div className="flex items-center justify-between py-2 border-b border-surface-700">
+                  <div className="flex items-center justify-between py-2 border-b border-white/10">
                     <span className="text-sm text-gray-400">Renews</span>
                     <span className="text-sm text-white">
                       {sub.expires_at ? new Date(sub.expires_at).toLocaleDateString() : 'Auto-renews monthly'}
@@ -240,7 +240,7 @@ export default function ProfilePage() {
               )}
 
               {userTier !== 'free' && (
-                <div className="mt-4 pt-4 border-t border-surface-700 flex gap-3">
+                <div className="mt-4 pt-4 border-t border-white/10 flex gap-3">
                   <Link
                     href="/pricing"
                     className="flex-1 text-center text-sm text-indigo-400 hover:text-indigo-300 border border-indigo-500/30 hover:border-indigo-500/60 py-2.5 rounded-xl transition"
@@ -252,7 +252,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Quick stats */}
-            <div className="bg-surface-900 border border-surface-700 rounded-2xl p-6">
+            <div className="glass border border-white/10 rounded-2xl p-6">
               <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                 <Trophy className="w-4 h-4" /> Quick Stats
               </h3>
@@ -265,7 +265,7 @@ export default function ProfilePage() {
                   <Link
                     key={label}
                     href={href}
-                    className="flex flex-col items-center gap-2 p-3 rounded-xl bg-surface-800 hover:bg-surface-700 border border-surface-700 hover:border-surface-600 transition group"
+                    className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/15 transition group"
                   >
                     <Icon className="w-5 h-5 text-indigo-400 group-hover:text-indigo-300 transition" />
                     <span className="text-xs text-gray-400 group-hover:text-gray-300 text-center transition">{label}</span>
@@ -275,7 +275,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Change Password */}
-            <div className="bg-surface-900 border border-surface-700 rounded-2xl p-6">
+            <div className="glass border border-white/10 rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
                   <Shield className="w-4 h-4" /> Security
@@ -300,7 +300,7 @@ export default function ProfilePage() {
                       value={currentPw}
                       onChange={(e) => setCurrentPw(e.target.value)}
                       required
-                      className="w-full bg-surface-800 border border-surface-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 pr-10"
+                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 pr-10"
                     />
                     <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-3 text-gray-500 hover:text-gray-300">
                       {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -316,7 +316,7 @@ export default function ProfilePage() {
                       onChange={(e) => setNewPw(e.target.value)}
                       required
                       minLength={8}
-                      className="w-full bg-surface-800 border border-surface-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 pr-10"
+                      className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 pr-10"
                     />
                     <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-3 text-gray-500 hover:text-gray-300">
                       {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -330,7 +330,7 @@ export default function ProfilePage() {
                     value={confirmPw}
                     onChange={(e) => setConfirmPw(e.target.value)}
                     required
-                    className="w-full bg-surface-800 border border-surface-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
                   />
 
                   {pwMsg && (
