@@ -28,12 +28,12 @@ if _sentry_dsn:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    print("🚀 FatimaZehra-AI-Tutor Backend Starting...")
+    print("[START] FatimaZehra-AI-Tutor Backend Starting...")
     await init_db()
-    print("📦 Database initialized")
+    print("[OK] Database initialized")
     yield
     # Shutdown
-    print("🛑 Shutting down...")
+    print("[SHUTDOWN] Shutting down...")
     await close_db()
 
 # Create FastAPI app
