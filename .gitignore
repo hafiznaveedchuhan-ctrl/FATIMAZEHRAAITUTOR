@@ -62,3 +62,12 @@ Thumbs.db
 
 # Claude
 .claude/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Build artifacts
+tsconfig.tsbuildinfo
+*.tsbuildinfo
