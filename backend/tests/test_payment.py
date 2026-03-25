@@ -115,3 +115,100 @@ async def test_webhook_invalid_signature(client):
     )
     # No Stripe-Signature header → SignatureVerificationError
     assert res.status_code == 400
+
+
+# ── activate-plan tests ───────────────────────────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_activate_plan_invalid_plan(client):
+    """Return 400 when plan name is not 'premium' or 'pro'."""
+    token = _register_and_token(client)
+    res = client.post(
+        "/payment/activate-plan",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"plan": "enterprise", "stripe_session_id": "cs_test_fake"},
+    )
+    assert res.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_activate_plan_unauthenticated(client):
+    """Return 401 without Authorization header."""
+    res = client.post(
+        "/payment/activate-plan",
+        json={"plan": "premium", "stripe_session_id": "cs_test_fake"},
+    )
+    assert res.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_activate_plan_success(client):
+    """Upgrading tier via activate-plan updates user tier in DB."""
+    token = _register_and_token(client)
+
+    mock_session_obj = MagicMock()
+    mock_session_obj.payment_status = "paid"
+    mock_session_obj.metadata = {"plan": "premium", "user_id": "any"}
+    mock_session_obj.customer = "cus_test123"
+    mock_session_obj.subscription = "sub_test456"
+
+    with patch("stripe.checkout.Session.retrieve", return_value=mock_session_obj):
+        res = client.post(
+            "/payment/activate-plan",
+            headers={"Authorization": f"Bearer {token}"},
+            json={"plan": "premium", "stripe_session_id": "cs_test_real"},
+        )
+
+    assert res.status_code == 200
+    data = res.json()
+    assert data["plan"] == "premium"
+    assert data["status"] == "activated"
+
+    # /auth/me should now show premium tier
+    me = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert me.status_code == 200
+    assert me.json()["tier"] == "premium"
+
+
+@pytest.mark.asyncio
+async def test_activate_plan_payment_not_complete(client):
+    """Return 400 if Stripe session payment_status is not 'paid'."""
+    token = _register_and_token(client)
+
+    mock_session_obj = MagicMock()
+    mock_session_obj.payment_status = "unpaid"
+    mock_session_obj.metadata = {"plan": "premium"}
+
+    with patch("stripe.checkout.Session.retrieve", return_value=mock_session_obj):
+        res = client.post(
+            "/payment/activate-plan",
+            headers={"Authorization": f"Bearer {token}"},
+            json={"plan": "premium", "stripe_session_id": "cs_test_unpaid"},
+        )
+
+    assert res.status_code == 400
+    assert "Payment not completed" in res.json()["detail"]
+
+
+# ── subscription endpoint tests ───────────────────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_get_subscription_no_record(client):
+    """Free user with no subscription record returns free tier info."""
+    token = _register_and_token(client)
+    res = client.get(
+        "/payment/subscription",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["plan"] == "free"
+    assert data["status"] == "active"
+    assert data["expires_at"] is None
+
+
+@pytest.mark.asyncio
+async def test_get_subscription_unauthenticated(client):
+    """Return 401 without auth."""
+    res = client.get("/payment/subscription")
+    assert res.status_code == 401

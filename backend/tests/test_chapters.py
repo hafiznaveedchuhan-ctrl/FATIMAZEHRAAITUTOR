@@ -143,3 +143,49 @@ async def test_get_chapter_by_slug_unauthorized(client):
     """Fetching a chapter without token returns 401."""
     res = client.get("/chapters/slug/python-basics")
     assert res.status_code == 401
+
+
+# ── GET /chapters/{chapter_id} (by ID) ────────────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_get_chapter_by_id_free_user_free_chapter(client):
+    """Free user can fetch a free chapter by ID."""
+    headers = _auth_headers(client, "byid@example.com")
+    # Get ID from chapter list
+    chapters = client.get("/chapters").json()
+    free_chapter = next(c for c in chapters if c["tier_required"] == "free")
+
+    res = client.get(f"/chapters/{free_chapter['id']}", headers=headers)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["id"] == free_chapter["id"]
+    assert "content_mdx" in data
+
+
+@pytest.mark.asyncio
+async def test_get_chapter_by_id_free_user_premium_blocked(client):
+    """Free user is blocked from premium chapter fetched by ID."""
+    headers = _auth_headers(client, "byidblock@example.com")
+    chapters = client.get("/chapters").json()
+    premium_chapter = next(c for c in chapters if c["tier_required"] == "premium")
+
+    res = client.get(f"/chapters/{premium_chapter['id']}", headers=headers)
+    assert res.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_get_chapter_by_id_not_found(client):
+    """Non-existent chapter ID returns 404."""
+    import uuid
+    headers = _auth_headers(client, "byidnf@example.com")
+    res = client.get(f"/chapters/{uuid.uuid4()}", headers=headers)
+    assert res.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_get_chapter_by_id_unauthorized(client):
+    """Fetching a chapter by ID without token returns 401."""
+    chapters = client.get("/chapters").json()
+    chapter_id = chapters[0]["id"]
+    res = client.get(f"/chapters/{chapter_id}")
+    assert res.status_code == 401

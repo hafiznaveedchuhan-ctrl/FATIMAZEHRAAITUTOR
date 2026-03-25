@@ -1,0 +1,15 @@
+[run]
+concurrency = thread
+omit =
+    seed.py
+    quiz_seed.py
+    settings.py
+    venv/*
+    alembic/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if __name__ == .__main__.:
+    raise NotImplementedError
