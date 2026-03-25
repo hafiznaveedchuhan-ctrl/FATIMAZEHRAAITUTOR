@@ -2,6 +2,11 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 
+// Server-side API URL (used in NextAuth authorize — runs on Node.js server, not browser)
+// BACKEND_URL is a private env var for server→backend calls (e.g. WSL2 IP on local dev)
+// Falls back to NEXT_PUBLIC_API_URL for production deployments
+const SERVER_API = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+
 export const authOptions: NextAuthOptions = {
   providers: [
     // Email/Password authentication
@@ -17,9 +22,9 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          // Call backend login endpoint
+          // Call backend login endpoint (server-side)
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/auth/login`,
+            `${SERVER_API}/auth/login`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -84,7 +89,7 @@ export const authOptions: NextAuthOptions = {
       if (trigger === 'update' && token.accessToken) {
         try {
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth/me`,
+            `${SERVER_API}/auth/me`,
             { headers: { Authorization: `Bearer ${token.accessToken}` } }
           )
           if (res.ok) {

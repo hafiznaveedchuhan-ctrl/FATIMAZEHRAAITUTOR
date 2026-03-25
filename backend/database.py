@@ -19,10 +19,16 @@ DATABASE_URL = os.getenv(
 )
 
 # Create async engine for SQLModel
+# pool_pre_ping: test connection before use (fixes "connection is closed" on idle)
+# pool_recycle: recycle connections every 5 minutes to avoid Neon's idle timeout
 engine = create_async_engine(
     DATABASE_URL,
     echo=os.getenv("SQL_ECHO", "False") == "True",
     future=True,
+    pool_pre_ping=True,
+    pool_recycle=300,
+    pool_size=5,
+    max_overflow=10,
 )
 
 # Async session factory
