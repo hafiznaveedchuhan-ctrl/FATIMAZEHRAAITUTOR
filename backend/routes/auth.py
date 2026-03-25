@@ -85,19 +85,31 @@ async def login(
     """
     Login with email and password
     """
+    import logging
+    logger = logging.getLogger(__name__)
+
     # Find user
     stmt = select(User).where(User.email == user_login.email)
     result = await session.execute(stmt)
     user = result.scalars().first()
 
-    if not user or not user.hashed_password:
+    if not user:
+        logger.warning(f"Login attempt with non-existent email: {user_login.email}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
 
+    if not user.hashed_password:
+        logger.warning(f"Login attempt on OAuth-only account: {user_login.email}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="This account uses Google sign-in. Use Google OAuth instead."
+        )
+
     # Verify password
     if not verify_password(user_login.password, user.hashed_password):
+        logger.warning(f"Failed login attempt for user: {user_login.email}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"

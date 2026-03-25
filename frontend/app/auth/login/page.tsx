@@ -26,15 +26,17 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        setError('Invalid email or password')
+        setError(result.error || 'Invalid email or password')
         return
       }
 
       if (result?.ok) {
         router.push('/dashboard')
       }
-    } catch {
-      setError('An error occurred. Please try again.')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.'
+      setError(errorMessage)
+      console.error('Login error:', error)
     } finally {
       setIsLoading(false)
     }

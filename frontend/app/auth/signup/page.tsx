@@ -75,10 +75,12 @@ export default function SignupPage() {
       if (signInResult?.ok) {
         router.push('/dashboard')
       } else {
-        router.push('/auth/login')
+        setError(signInResult?.error || 'Auto-login failed after registration. Please try signing in manually.')
       }
-    } catch {
-      setError('An error occurred. Please try again.')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.'
+      setError(`Registration error: ${errorMessage}`)
+      console.error('Signup error:', error)
     } finally {
       setIsLoading(false)
     }

@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null
+          throw new Error('Email and password required')
         }
 
         try {
@@ -36,7 +36,9 @@ export const authOptions: NextAuthOptions = {
           )
 
           if (!res.ok) {
-            return null
+            const errorData = await res.json().catch(() => ({}))
+            const errorMsg = errorData?.detail || `Login failed with status ${res.status}`
+            throw new Error(errorMsg)
           }
 
           const user = await res.json()
@@ -48,8 +50,9 @@ export const authOptions: NextAuthOptions = {
             tier: user.tier,
           }
         } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : 'Login failed'
           console.error("Auth error:", error)
-          return null
+          throw new Error(errorMsg)
         }
       },
     }),
@@ -95,8 +98,13 @@ export const authOptions: NextAuthOptions = {
           if (res.ok) {
             const me = await res.json()
             token.tier = me.tier
+          } else {
+            console.error(`Failed to refresh user tier: ${res.status} ${res.statusText}`)
           }
-        } catch {}
+        } catch (error) {
+          console.error('Error refreshing user tier:', error)
+          // Keep old tier if refresh fails (don't break the session)
+        }
       }
       return token
     },
