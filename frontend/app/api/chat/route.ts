@@ -63,7 +63,11 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Unauthorized — please log in again' }, { status: 401 })
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json({ error: 'AI Chat is not configured. Please set OPENAI_API_KEY in environment variables.' }, { status: 503 })
   }
 
   const userTier = session.user.tier || 'free'
