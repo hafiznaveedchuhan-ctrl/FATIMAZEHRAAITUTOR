@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2023-10-16' as any,
-})
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+    apiVersion: '2023-10-16' as any,
+  })
+}
 
 export async function POST(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
@@ -19,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   try {
     // Verify with Stripe that checkout was paid
-    const session = await stripe.checkout.sessions.retrieve(session_id)
+    const session = await getStripe().checkout.sessions.retrieve(session_id)
     if (session.payment_status !== 'paid') {
       return NextResponse.json({ detail: 'Payment not completed' }, { status: 400 })
     }

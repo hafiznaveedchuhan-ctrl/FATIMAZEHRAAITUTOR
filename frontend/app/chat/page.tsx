@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { Suspense, useEffect, useRef, useState, useCallback } from 'react'
 import NavBar from '@/components/NavBar'
 import { Send, Bot, User, Copy, Check, BookOpen, Sparkles, AlertCircle } from 'lucide-react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -144,7 +144,7 @@ function MessageContent({ content, isStreaming }: { content: string; isStreaming
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
-export default function ChatPage() {
+function ChatPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -517,5 +517,13 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin h-8 w-8 border-4 border-purple-500 border-t-transparent rounded-full" /></div>}>
+      <ChatPageContent />
+    </Suspense>
   )
 }

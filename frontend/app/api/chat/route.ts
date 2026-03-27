@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+function getOpenAI() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY || '',
+  })
+}
 
 /** Messages per day per tier */
 const TIER_LIMITS: Record<string, number> = {
@@ -101,7 +103,7 @@ export async function POST(req: Request) {
       { role: 'user', content: message.trim() },
     ]
 
-    const stream = await openai.chat.completions.create({
+    const stream = await getOpenAI().chat.completions.create({
       model: 'gpt-4-turbo-preview',
       messages,
       stream: true,
