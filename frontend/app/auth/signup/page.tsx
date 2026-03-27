@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { User, Mail, Lock, UserPlus, Chrome, Check, X } from 'lucide-react'
+import Toast from '@/components/Toast'
 
 interface PasswordRule {
   label: string
@@ -28,6 +29,7 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showRules, setShowRules] = useState(false)
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   const isPasswordValid = passwordRules.every((r) => r.test(password))
 
@@ -73,13 +75,15 @@ export default function SignupPage() {
       })
 
       if (signInResult?.ok) {
-        router.push('/dashboard')
+        setToast({ message: 'Account created successfully! Redirecting...', type: 'success' })
+        setTimeout(() => router.push('/dashboard'), 1500)
       } else {
         setError(signInResult?.error || 'Auto-login failed after registration. Please try signing in manually.')
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.'
       setError(`Registration error: ${errorMessage}`)
+      setToast({ message: `Registration failed`, type: 'error' })
       console.error('Signup error:', error)
     } finally {
       setIsLoading(false)
@@ -101,6 +105,7 @@ export default function SignupPage() {
 
   return (
     <div>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-white mb-1">Create account</h2>
         <p className="text-sm text-gray-400">Start your Python journey for free</p>

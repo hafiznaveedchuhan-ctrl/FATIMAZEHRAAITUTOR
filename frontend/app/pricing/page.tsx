@@ -28,7 +28,7 @@ const TIERS = [
       'Personalized learning path',
     ],
     cta: 'Get Started',
-    ctaHref: '/auth/register',
+    ctaHref: '/auth/signup',
     highlight: false,
   },
   {

@@ -20,7 +20,7 @@ from routes.auth import get_current_user
 # ── Stripe init ─────────────────────────────────────────────────────────────
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
 WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
-FRONTEND_URL = os.getenv("NEXT_PUBLIC_APP_URL", "http://localhost:3000")
+FRONTEND_URL = os.getenv("NEXT_PUBLIC_APP_URL", "https://frontend-blue-kappa-15.vercel.app")
 
 # Inline price data (no pre-created Stripe Price IDs needed)
 PLAN_CONFIG = {

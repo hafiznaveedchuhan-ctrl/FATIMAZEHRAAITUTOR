@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, Lock, LogIn, Chrome } from 'lucide-react'
+import Toast from '@/components/Toast'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,15 +29,18 @@ export default function LoginPage() {
 
       if (result?.error) {
         setError(result.error || 'Invalid email or password')
+        setToast({ message: 'Invalid email or password', type: 'error' })
         return
       }
 
       if (result?.ok) {
-        router.push('/dashboard')
+        setToast({ message: 'Login successful! Redirecting...', type: 'success' })
+        setTimeout(() => router.push('/dashboard'), 1500)
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.'
       setError(errorMessage)
+      setToast({ message: 'Login failed', type: 'error' })
       console.error('Login error:', error)
     } finally {
       setIsLoading(false)
@@ -44,6 +49,7 @@ export default function LoginPage() {
 
   return (
     <div>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-white mb-1">Welcome back</h2>
         <p className="text-sm text-gray-400">Sign in to continue your Python journey</p>

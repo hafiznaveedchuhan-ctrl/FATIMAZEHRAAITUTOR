@@ -2,14 +2,17 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Toast from '@/components/Toast'
 
 function PaymentSuccessContent() {
   const { update } = useSession()
   const searchParams = useSearchParams()
+  const router = useRouter()
   const session_id = searchParams.get('session_id')
   const [status, setStatus] = useState<'loading' | 'done' | 'error'>('loading')
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   useEffect(() => {
     if (!session_id) { setStatus('done'); return }
@@ -25,12 +28,20 @@ function PaymentSuccessContent() {
         // Refresh NextAuth session so new tier shows in navbar/dashboard
         await update()
         setStatus('done')
+        setToast({ message: 'Payment successful! Redirecting to your courses...', type: 'success' })
+        // Auto-redirect to learn page after 3 seconds
+        setTimeout(() => router.push('/learn'), 3000)
       })
-      .catch(() => setStatus('done')) // still show success page even if refresh fails
+      .catch(() => {
+        setStatus('done')
+        setToast({ message: 'Payment received! Redirecting...', type: 'success' })
+        setTimeout(() => router.push('/learn'), 3000)
+      })
   }, [session_id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="min-h-screen bg-transparent text-white flex items-center justify-center px-4">
+      {toast && <Toast message={toast.message} type={toast.type} duration={4000} onClose={() => setToast(null)} />}
       <div className="max-w-md w-full text-center glass rounded-2xl p-10">
         {/* Icon */}
         <div className="w-24 h-24 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto mb-6 animate-pulse-glow" style={{ boxShadow: '0 0 30px rgba(16, 185, 129, 0.3)' }}>
@@ -47,7 +58,7 @@ function PaymentSuccessContent() {
         <p className="text-gray-400 mb-2">
           {status === 'loading'
             ? 'Activating your plan...'
-            : 'Your subscription is now active. Premium chapters are unlocked!'}
+            : 'Your subscription is now active. Premium chapters are unlocked! Redirecting to courses...'}
         </p>
 
         {status === 'done' && (
