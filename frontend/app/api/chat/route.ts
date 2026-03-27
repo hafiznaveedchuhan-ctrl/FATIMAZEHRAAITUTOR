@@ -142,15 +142,19 @@ export async function POST(req: Request) {
     })
   } catch (error: unknown) {
     console.error('Chat API error:', error)
-    const apiError = error as { status?: number }
+    const apiError = error as { status?: number; message?: string; code?: string; error?: { message?: string } }
 
-    if (apiError?.status === 401) {
-      return NextResponse.json({ error: 'Invalid OpenAI API key' }, { status: 500 })
+    if (apiError?.status === 401 || apiError?.code === 'invalid_api_key') {
+      return NextResponse.json({ error: 'Invalid OpenAI API key. Please check your OPENAI_API_KEY.' }, { status: 500 })
     }
     if (apiError?.status === 429) {
       return NextResponse.json({ error: 'OpenAI rate limit exceeded. Try again later.' }, { status: 429 })
     }
+    if (apiError?.code === 'insufficient_quota') {
+      return NextResponse.json({ error: 'OpenAI quota exceeded. Please check your billing at platform.openai.com.' }, { status: 500 })
+    }
 
-    return NextResponse.json({ error: 'Failed to generate response' }, { status: 500 })
+    const errMsg = apiError?.message || apiError?.error?.message || 'Failed to generate response'
+    return NextResponse.json({ error: errMsg }, { status: 500 })
   }
 }
