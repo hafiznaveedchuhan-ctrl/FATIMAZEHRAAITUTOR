@@ -50,7 +50,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:3001",
-        os.getenv("NEXT_PUBLIC_APP_URL", "http://localhost:3000")
+        "https://fatimazehraaitutor-yci1.vercel.app",
+        "https://frontend-blue-kappa-15.vercel.app",
+        os.getenv("NEXT_PUBLIC_APP_URL", "http://localhost:3000"),
     ],
     allow_credentials=True,
     allow_methods=["*"],
