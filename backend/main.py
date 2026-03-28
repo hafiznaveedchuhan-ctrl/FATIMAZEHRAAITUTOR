@@ -11,7 +11,7 @@ import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from database import init_db, close_db
-from routes import auth_router, chapters_router, quiz_router, progress_router, payment_router
+from routes import auth_router, chapters_router, quiz_router, progress_router, payment_router, ai_router
 
 # ── Sentry monitoring (initialised only when DSN is set) ──
 _sentry_dsn = os.getenv("SENTRY_DSN")
@@ -67,6 +67,7 @@ app.include_router(chapters_router)
 app.include_router(quiz_router)
 app.include_router(progress_router)
 app.include_router(payment_router)
+app.include_router(ai_router)
 
 # Health check endpoint
 @app.get("/health")
