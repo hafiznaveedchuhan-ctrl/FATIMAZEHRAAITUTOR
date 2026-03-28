@@ -1,0 +1,434 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FatimaZehra Python Tutor - Course Companion API",
+    "description": "Deterministic backend API for the FatimaZehra Python Tutor ChatGPT App. Phase 1: Zero-Backend-LLM - all endpoints are deterministic with ZERO LLM calls.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://naveed64-fatimazehra-ai-tutor-backend.hf.space",
+      "description": "Production Backend (HuggingFace Spaces)"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "operationId": "registerUser",
+        "summary": "Register a new student account",
+        "description": "Create a new user account with email, password, and name. Returns JWT token for authentication.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password", "name"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string", "minLength": 8 },
+                  "name": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "loginUser",
+        "summary": "Login with email and password",
+        "description": "Authenticate an existing user. Returns JWT token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "getCurrentUser",
+        "summary": "Get current user profile",
+        "description": "Returns the authenticated user's profile including tier (free/premium/pro).",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token from login/register"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chapters": {
+      "get": {
+        "operationId": "listChapters",
+        "summary": "List all Python course chapters",
+        "description": "Returns all 10 chapters with their number, title, slug, and tier_required. Chapters 1-3 are free, 4-8 are premium, 9-10 are pro.",
+        "responses": {
+          "200": {
+            "description": "List of chapters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ChapterResponse" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chapters/{chapter_id}": {
+      "get": {
+        "operationId": "getChapterContent",
+        "summary": "Get full chapter content",
+        "description": "Returns the full MDX content of a chapter. Requires auth and appropriate tier. Free users can only access chapters 1-3.",
+        "parameters": [
+          {
+            "name": "chapter_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chapter detail with full content",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChapterDetail" }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient tier - user needs to upgrade"
+          }
+        }
+      }
+    },
+    "/chapters/slug/{slug}": {
+      "get": {
+        "operationId": "getChapterBySlug",
+        "summary": "Get chapter content by slug",
+        "description": "Same as getChapterContent but uses the chapter slug instead of ID.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chapter detail",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChapterDetail" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quiz/by-slug/{slug}/questions": {
+      "get": {
+        "operationId": "getQuizQuestions",
+        "summary": "Get quiz questions for a chapter",
+        "description": "Returns 10 MCQ questions for the chapter. Correct answers are hidden. Present these one at a time to the student.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz questions (answers hidden)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/QuizQuestionResponse" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quiz/submit": {
+      "post": {
+        "operationId": "submitQuiz",
+        "summary": "Submit quiz answers for grading",
+        "description": "Submit all answers for a chapter quiz. Backend grades using rule-based answer keys (ZERO LLM). Returns score, correct/incorrect for each question with explanations.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/QuizSubmitRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Graded quiz results",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QuizSubmitResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/progress/me": {
+      "get": {
+        "operationId": "getStudentProgress",
+        "summary": "Get student's learning progress",
+        "description": "Returns comprehensive progress: chapters completed, quiz scores, streak days, completion percentage, and recent activity.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full progress summary with stats, chapter progress, and recent activity"
+          }
+        }
+      }
+    },
+    "/progress/mark-complete": {
+      "post": {
+        "operationId": "markChapterComplete",
+        "summary": "Mark a chapter as completed",
+        "description": "Records that the student has completed reading a chapter.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["chapter_id"],
+                "properties": {
+                  "chapter_id": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chapter marked as complete"
+          }
+        }
+      }
+    },
+    "/payment/subscription": {
+      "get": {
+        "operationId": "getSubscription",
+        "summary": "Get current subscription status",
+        "description": "Returns the user's subscription plan (free/premium/pro), status, and expiry date.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription details"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": { "type": "string" },
+          "token_type": { "type": "string", "default": "bearer" },
+          "user_id": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "tier": { "type": "string", "enum": ["free", "premium", "pro"] }
+        },
+        "required": ["access_token", "user_id", "email", "name", "tier"]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "tier": { "type": "string", "enum": ["free", "premium", "pro"] }
+        },
+        "required": ["id", "email", "name", "tier"]
+      },
+      "ChapterResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "number": { "type": "integer" },
+          "title": { "type": "string" },
+          "slug": { "type": "string" },
+          "tier_required": { "type": "string", "enum": ["free", "premium", "pro"] }
+        },
+        "required": ["id", "number", "title", "slug", "tier_required"]
+      },
+      "ChapterDetail": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "number": { "type": "integer" },
+          "title": { "type": "string" },
+          "slug": { "type": "string" },
+          "tier_required": { "type": "string" },
+          "content_mdx": { "type": "string" }
+        },
+        "required": ["id", "number", "title", "slug", "tier_required", "content_mdx"]
+      },
+      "QuizQuestionResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "question": { "type": "string" },
+          "options": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["id", "question", "options"]
+      },
+      "QuizSubmitRequest": {
+        "type": "object",
+        "properties": {
+          "chapter_id": { "type": "string" },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question_id": { "type": "string" },
+                "selected_option": { "type": "integer" }
+              },
+              "required": ["question_id", "selected_option"]
+            }
+          }
+        },
+        "required": ["chapter_id", "answers"]
+      },
+      "QuizSubmitResponse": {
+        "type": "object",
+        "properties": {
+          "score": { "type": "integer" },
+          "correct_count": { "type": "integer" },
+          "total": { "type": "integer" },
+          "passed": { "type": "boolean" },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question_id": { "type": "string" },
+                "question": { "type": "string" },
+                "options": { "type": "array", "items": { "type": "string" } },
+                "selected_option": { "type": "integer" },
+                "correct_option": { "type": "integer" },
+                "explanation": { "type": "string" },
+                "is_correct": { "type": "boolean" }
+              }
+            }
+          }
+        },
+        "required": ["score", "correct_count", "total", "passed", "results"]
+      }
+    }
+  }
+}

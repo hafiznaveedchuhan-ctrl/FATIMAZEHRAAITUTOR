@@ -1,0 +1,148 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FatimaZehra Python Tutor - Hybrid Intelligence API (Phase 2)",
+    "description": "Premium hybrid endpoints that use backend LLM calls. These are ONLY for Pro tier users and are clearly separated from Phase 1 deterministic APIs.",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://naveed64-fatimazehra-ai-tutor-backend.hf.space",
+      "description": "Production Backend (HuggingFace Spaces)"
+    }
+  ],
+  "paths": {
+    "/ai/learning-path": {
+      "post": {
+        "operationId": "getAdaptiveLearningPath",
+        "summary": "Generate personalized learning path (HYBRID - uses LLM)",
+        "description": "Analyzes the student's quiz scores, completion patterns, and weak areas to generate a personalized chapter recommendation sequence. This endpoint uses GPT-4o on the backend for reasoning. PREMIUM FEATURE - Pro tier only. Estimated cost: $0.020/request.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token (must be Pro tier user)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id"],
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "description": "The authenticated user's ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Personalized learning path",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "recommended_chapters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "chapter_number": { "type": "integer" },
+                          "chapter_title": { "type": "string" },
+                          "reason": { "type": "string" },
+                          "priority": { "type": "string", "enum": ["high", "medium", "low"] }
+                        }
+                      }
+                    },
+                    "summary": { "type": "string" },
+                    "estimated_completion_days": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Pro tier required"
+          }
+        }
+      }
+    },
+    "/ai/analyze-weakness": {
+      "post": {
+        "operationId": "analyzeWeaknesses",
+        "summary": "Analyze student weaknesses (HYBRID - uses LLM)",
+        "description": "Analyzes quiz attempt history to identify weak topics and provide targeted improvement recommendations. Uses GPT-4o for pattern analysis. PREMIUM FEATURE - Pro tier only. Estimated cost: $0.015/request.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token (must be Pro tier user)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id"],
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "description": "The authenticated user's ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Weakness analysis results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "weak_topics": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "topic": { "type": "string" },
+                          "chapter": { "type": "string" },
+                          "score_trend": { "type": "string" },
+                          "recommendation": { "type": "string" }
+                        }
+                      }
+                    },
+                    "overall_assessment": { "type": "string" },
+                    "focus_chapters": {
+                      "type": "array",
+                      "items": { "type": "integer" }
+                    },
+                    "next_action": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Pro tier required"
+          }
+        }
+      }
+    }
+  }
+}
