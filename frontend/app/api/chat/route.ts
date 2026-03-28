@@ -114,7 +114,7 @@ export async function POST(req: Request) {
     ]
 
     const stream = await getOpenAI().chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4o',
       messages,
       stream: true,
       max_tokens: 1200,
