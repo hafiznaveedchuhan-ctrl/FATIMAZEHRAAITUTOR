@@ -1,0 +1,284 @@
+# FatimaZehra AI Tutor - ChatGPT App Manifest
+# Panaversity Agent Factory Hackathon IV
+# Course Companion FTE - Modern Python
+
+name: FatimaZehra AI Tutor
+description: >
+  A comprehensive Python programming tutor that teaches 10 chapters
+  from basics to advanced concepts. Powered by Agent Skills for
+  consistent educational delivery with quizzes, progress tracking,
+  and freemium content gating.
+
+version: "1.0.0"
+author: FatimaZehra AI Tutor Team
+hackathon: Panaversity Agent Factory Hackathon IV
+
+# Course Configuration
+course:
+  topic: "Modern Python"
+  option: "D"
+  chapters: 10
+  quizzes_per_chapter: 10
+  difficulty_range: "Beginner to Advanced"
+
+# App Configuration
+app:
+  type: chatgpt-app
+  sdk: openai-apps-sdk
+  model: gpt-4o
+  max_tokens: 1200
+  temperature: 0.7
+  streaming: true
+
+# Authentication
+auth:
+  provider: nextauth
+  strategy: jwt
+  session_duration: "7d"
+  oauth:
+    - google
+
+# Backend API Configuration
+backend:
+  framework: fastapi
+  python_version: "3.12"
+  base_url: "https://naveed64-fatimazehra-ai-tutor-backend.hf.space"
+  endpoints:
+    # Deterministic APIs (Phase 1 - Zero LLM)
+    auth:
+      register: "POST /auth/register"
+      login: "POST /auth/login"
+      me: "GET /auth/me"
+      logout: "POST /auth/logout"
+      google_callback: "POST /auth/google-callback"
+      change_password: "POST /auth/change-password"
+
+    chapters:
+      list: "GET /chapters"
+      detail: "GET /chapters/{id}"
+      next: "GET /chapters/{id}/next"
+      previous: "GET /chapters/{id}/previous"
+
+    quiz:
+      questions: "GET /quiz/{chapter_id}"
+      submit: "POST /quiz/submit"
+
+    progress:
+      get: "GET /progress/{user_id}"
+      mark_complete: "POST /progress/mark-complete"
+
+    search:
+      query: "GET /search?q={query}"
+
+    access:
+      check: "GET /access/check"
+
+    # Hybrid APIs (Phase 2 - Premium Only)
+    hybrid:
+      adaptive_path: "POST /ai/learning-path"
+      weakness_analysis: "POST /ai/analyze-weakness"
+
+    # Web App APIs (Phase 3)
+    chat:
+      stream: "POST /api/chat"
+
+    payments:
+      create_session: "POST /payment/create-session"
+      webhook: "POST /payment/webhook"
+
+# Runtime Skills
+skills:
+  - name: concept-explainer
+    file: ".claude/skills/concept-explainer/SKILL.md"
+    description: "Explains Python concepts at various complexity levels"
+    triggers:
+      - "explain"
+      - "what is"
+      - "how does"
+      - "define"
+      - "tell me about"
+
+  - name: quiz-master
+    file: ".claude/skills/quiz-master/SKILL.md"
+    description: "Guides students through quizzes with encouragement"
+    triggers:
+      - "quiz"
+      - "test me"
+      - "practice"
+      - "assess"
+      - "check my knowledge"
+
+  - name: socratic-tutor
+    file: ".claude/skills/socratic-tutor/SKILL.md"
+    description: "Guides learning through questions, not answers"
+    triggers:
+      - "help me think"
+      - "I'm stuck"
+      - "I don't understand"
+      - "confused"
+      - "hint"
+
+  - name: progress-motivator
+    file: ".claude/skills/progress-motivator/SKILL.md"
+    description: "Celebrates achievements and maintains motivation"
+    triggers:
+      - "my progress"
+      - "streak"
+      - "how am I doing"
+      - "stats"
+      - "achievements"
+
+# Freemium Tiers
+tiers:
+  free:
+    price: 0
+    chapters: [1, 2, 3]
+    quiz_access: basic
+    ai_messages_per_day: 5
+    features:
+      - "First 3 chapters"
+      - "Basic quizzes"
+      - "Progress tracking"
+
+  premium:
+    price: 9.99
+    currency: USD
+    billing: monthly
+    chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    quiz_access: unlimited
+    ai_messages_per_day: 50
+    features:
+      - "All 10 chapters"
+      - "Unlimited quizzes"
+      - "50 AI chat messages/day"
+      - "Full progress analytics"
+
+  pro:
+    price: 19.99
+    currency: USD
+    billing: monthly
+    chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    quiz_access: unlimited
+    ai_messages_per_day: -1  # unlimited
+    features:
+      - "Everything in Premium"
+      - "Unlimited AI chat"
+      - "Adaptive learning path"
+      - "Weakness analysis"
+      - "Personalized recommendations"
+
+# Database
+database:
+  provider: neon
+  engine: postgresql
+  orm: sqlmodel
+  tables:
+    - users
+    - chapters
+    - quiz_questions
+    - quiz_attempts
+    - user_progress
+    - subscriptions
+
+# Content Storage
+storage:
+  provider: cloudflare-r2
+  content_types:
+    - course_mdx
+    - media_assets
+    - quiz_banks
+
+# Payments
+payments:
+  provider: stripe
+  mode: test
+  test_card: "4242 4242 4242 4242"
+
+# Deployment
+deployment:
+  frontend:
+    platform: vercel
+    url: "https://frontend-blue-kappa-15.vercel.app"
+    auto_deploy: true
+    branch: main
+
+  backend:
+    platform: huggingface-spaces
+    url: "https://naveed64-fatimazehra-ai-tutor-backend.hf.space"
+
+  database:
+    platform: neon
+    region: us-east-1
+
+# Kubernetes (Production)
+kubernetes:
+  namespace: fatimazehra-ai-tutor
+  replicas:
+    min: 2
+    max: 10
+  resources:
+    cpu: "500m"
+    memory: "512Mi"
+  strategy: RollingUpdate
+  health_check: "/health"
+  ingress: nginx
+
+# Architecture Phases
+phases:
+  phase1:
+    name: "Zero-Backend-LLM"
+    description: "ChatGPT handles all intelligence, backend is purely deterministic"
+    backend_llm_calls: false
+    features:
+      - content_delivery
+      - navigation
+      - grounded_qa
+      - rule_based_quizzes
+      - progress_tracking
+      - freemium_gate
+
+  phase2:
+    name: "Hybrid Intelligence"
+    description: "Selective backend LLM for premium features only"
+    backend_llm_calls: true
+    premium_only: true
+    hybrid_features:
+      - adaptive_learning_path
+      - llm_graded_assessments
+
+  phase3:
+    name: "Web Application"
+    description: "Full standalone Next.js web app with all features"
+    frontend: nextjs
+    features:
+      - all_phase1_features
+      - all_phase2_features
+      - ai_chat_streaming
+      - stripe_payments
+      - user_dashboard
+      - responsive_design
+
+# Guardrails
+guardrails:
+  - "Only explain concepts covered in course chapters"
+  - "Never provide answers to quiz questions directly"
+  - "Always encourage, never shame incorrect answers"
+  - "Redirect off-topic questions to Python learning"
+  - "Respect freemium tier access restrictions"
+  - "Ground all explanations in course content"
+
+# System Prompt (for ChatGPT App)
+system_prompt: |
+  You are FatimaZehra AI Tutor, an expert Python programming tutor.
+  Your role is to help students learn Python clearly and effectively.
+
+  Guidelines:
+  - Provide clear, concise explanations with working code examples
+  - Always use ```python for Python code blocks
+  - Encourage learners and celebrate progress
+  - Break down complex concepts into simple steps
+  - Point out common mistakes and how to avoid them
+  - If asked about other topics, gently redirect to Python learning
+  - Use the runtime skills (concept-explainer, quiz-master,
+    socratic-tutor, progress-motivator) based on context
+  - Respect the student's current tier and chapter access

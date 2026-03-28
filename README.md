@@ -184,43 +184,202 @@
 
 ## Architecture
 
+<div align="center">
+
+### Three-Phase Architecture (Agent Factory Pattern)
+
+</div>
+
+> **Design Principle:** Zero-Backend-LLM is the default (Phase 1). Hybrid intelligence is selective, justified, and premium (Phase 2). Full web app with all features (Phase 3).
+
+<table>
+<tr>
+<td align="center" width="33%">
+
+#### Phase 1
+**Zero-Backend-LLM**
+
+![Phase](https://img.shields.io/badge/ChatGPT_App-OpenAI_SDK-412991?style=flat-square&logo=openai)
+
 ```
-                          +---------------------------+
-                          |      Users (Browser)      |
-                          +------------+--------------+
-                                       |
-                                       v
-+----------------------------------------------------------------------+
-|                   FRONTEND  (Next.js 14 on Vercel)                    |
-|                                                                      |
-|   +----------+   +-----------+   +----------+   +----------------+   |
-|   |   Auth   |   |  Learn /  |   |   Chat   |   |   Payments     |   |
-|   | NextAuth |   | Chapters  |   |  GPT-4o  |   |   (Stripe)     |   |
-|   |  + JWT   |   |           |   | Streaming|   |                |   |
-|   +----------+   +-----------+   +----------+   +----------------+   |
-|                                                                      |
-|              API Routes: /api/chat  /api/auth  /api/stripe           |
-+----------------------------------------------------------------------+
-                                       |
-                                       | HTTPS
-                                       v
-+----------------------------------------------------------------------+
-|              BACKEND  (FastAPI on HuggingFace Spaces)                 |
-|                                                                      |
-|   +----------+   +-----------+   +----------+   +----------------+   |
-|   | Auth API |   | Chapters  |   |   Quiz   |   |   Progress     |   |
-|   | /auth/*  |   | /chapters |   |  /quiz   |   |  /progress     |   |
-|   +----------+   +-----------+   +----------+   +----------------+   |
-+----------------------------------------------------------------------+
-                                       |
-                                       v
-+----------------------------------------------------------------------+
-|                  DATABASE  (Neon PostgreSQL - Serverless)              |
-|                                                                      |
-|   users  |  chapters  |  quiz_questions  |  user_progress            |
-|   quiz_attempts  |  subscriptions                                    |
-+----------------------------------------------------------------------+
+User
+  |
+ChatGPT App (ALL intelligence)
+  |
+Backend (Deterministic ONLY)
+  |
+Database / R2
 ```
+
+Backend: ZERO LLM calls
+ChatGPT: Explains, tutors, adapts
+
+</td>
+<td align="center" width="33%">
+
+#### Phase 2
+**Hybrid Intelligence**
+
+![Phase](https://img.shields.io/badge/Premium-GPT--4o_Backend-FF6B6B?style=flat-square&logo=openai)
+
+```
+User
+  |
+ChatGPT App
+  |
+Backend
+  |-- Deterministic (Phase 1)
+  |-- Hybrid LLM (Premium only)
+  |
+Database / R2 / GPT-4o
+```
+
+Selective LLM for paid users only
+
+</td>
+<td align="center" width="33%">
+
+#### Phase 3
+**Full Web App**
+
+![Phase](https://img.shields.io/badge/Next.js_14-Vercel-000000?style=flat-square&logo=vercel)
+
+```
+User
+  |
+Next.js Web App
+  |
+Backend APIs (All Features)
+  |
+Database / GPT-4o / Stripe
+```
+
+Standalone app with everything
+
+</td>
+</tr>
+</table>
+
+### System Architecture Diagram
+
+```
+                    +----------------------------------+
+                    |        STUDENTS / USERS           |
+                    |     (Browser / ChatGPT Client)    |
+                    +---------+------------+-----------+
+                              |            |
+              +---------------+            +----------------+
+              v                                             v
++----------------------------+          +----------------------------+
+| CHATGPT APP (Phase 1 & 2) |          |  WEB APP (Phase 3)         |
+| OpenAI Apps SDK            |          |  Next.js 14 on Vercel      |
+|                            |          |                            |
+| Runtime Skills:            |          | +------+ +------+ +------+ |
+| - concept-explainer        |          | | Auth | | Chat | | Pay  | |
+| - quiz-master              |          | | JWT  | |GPT-4o| |Stripe| |
+| - socratic-tutor           |          | +------+ +------+ +------+ |
+| - progress-motivator       |          | +------+ +------+ +------+ |
++-------------+--------------+          | |Learn | |Quiz  | |Dash  | |
+              |                         | |Pages | |MCQ   | |Board | |
+              |                         | +------+ +------+ +------+ |
+              |                         +-------------+--------------+
+              |                                       |
+              +-------------------+-------------------+
+                                  |
+                                  v  HTTPS / REST
++================================================================+
+|              BACKEND  (FastAPI on HuggingFace Spaces)            |
+|                                                                  |
+|  +====================  DETERMINISTIC (Phase 1) ==============+  |
+|  |  Auth API  |  Chapters API  |  Quiz API  |  Progress API   |  |
+|  |  /auth/*   |  /chapters/*   |  /quiz/*   |  /progress/*    |  |
+|  |            |                |  (rule-    |                 |  |
+|  |  Search    |  Navigation    |   based)   |  Access Control |  |
+|  +============================================================+  |
+|                                                                  |
+|  +====================  HYBRID (Phase 2) =====================+  |
+|  |  Adaptive Learning Path  |  LLM-Graded Assessments         |  |
+|  |  POST /ai/learning-path  |  POST /ai/analyze-weakness      |  |
+|  |  (Premium-gated)         |  (Pro-gated)                    |  |
+|  +============================================================+  |
+|                                                                  |
+|  +====================  WEB APIs (Phase 3) ===================+  |
+|  |  AI Chat Streaming       |  Stripe Payments                |  |
+|  |  POST /api/chat (GPT-4o) |  POST /payment/create-session   |  |
+|  +============================================================+  |
++==================================+===============================+
+                                   |
+            +----------------------+----------------------+
+            v                                             v
++----------------------------+          +----------------------------+
+|   NEON POSTGRESQL          |          |   EXTERNAL SERVICES        |
+|   (Serverless - US East)   |          |                            |
+|                            |          |  OpenAI GPT-4o  (AI)       |
+|   - users                  |          |  Stripe         (Payments) |
+|   - chapters               |          |  Google OAuth   (Auth)     |
+|   - quiz_questions         |          |  Cloudflare R2  (Storage)  |
+|   - quiz_attempts          |          |  Vercel         (Frontend) |
+|   - user_progress          |          |  HuggingFace    (Backend)  |
+|   - subscriptions          |          |                            |
++----------------------------+          +----------------------------+
+```
+
+### Agent Factory Layers
+
+| Layer | Technology | Purpose | Phase |
+|:---:|:---|:---|:---:|
+| **L3** | FastAPI (Python 3.12) | HTTP Interface + API | 1, 2, 3 |
+| **L4** | OpenAI GPT-4o | AI Orchestration | 2, 3 |
+| **L6** | Runtime Skills + MCP | Domain Knowledge | 1, 2, 3 |
+
+---
+
+## Agent Skills (Runtime)
+
+The Course Companion FTE uses four runtime skills for consistent educational delivery:
+
+<table>
+<tr>
+<td width="25%" align="center">
+
+**concept-explainer**
+
+![Skill](https://img.shields.io/badge/Skill-Active-4CAF50?style=flat-square)
+
+Explains Python concepts at beginner, intermediate, and advanced levels with code examples and analogies
+
+</td>
+<td width="25%" align="center">
+
+**quiz-master**
+
+![Skill](https://img.shields.io/badge/Skill-Active-4CAF50?style=flat-square)
+
+Guides quizzes with encouragement, presents questions one-by-one, celebrates scores
+
+</td>
+<td width="25%" align="center">
+
+**socratic-tutor**
+
+![Skill](https://img.shields.io/badge/Skill-Active-4CAF50?style=flat-square)
+
+Teaches through strategic questions, builds problem-solving confidence
+
+</td>
+<td width="25%" align="center">
+
+**progress-motivator**
+
+![Skill](https://img.shields.io/badge/Skill-Active-4CAF50?style=flat-square)
+
+Celebrates achievements, tracks streaks, provides motivational summaries
+
+</td>
+</tr>
+</table>
+
+> Skills are defined as `SKILL.md` files in `.claude/skills/` with metadata, workflows, response templates, and key principles.
 
 ---
 
@@ -523,8 +682,20 @@ FatimaZehra-AI-Tutor/
 |
 +-- docker-compose.yml              # Local development
 +-- docker-compose.prod.yml         # Production config
++-- chatgpt-app-manifest.yaml       # ChatGPT App definition
 +-- .env.example                    # Environment variable template
 +-- README.md                       # This file
+|
++-- docs/                           # Hackathon Documentation
+|   +-- architecture-diagram.md     # Full system architecture
+|   +-- cost-analysis.md            # Cost breakdown & projections
+|   +-- spec.md                     # Feature specification
+|
++-- .claude/skills/                 # Agent Runtime Skills
+    +-- concept-explainer/SKILL.md  # Explains concepts at all levels
+    +-- quiz-master/SKILL.md        # Guides quizzes with encouragement
+    +-- socratic-tutor/SKILL.md     # Teaches through questions
+    +-- progress-motivator/SKILL.md # Celebrates & motivates
 ```
 
 ---
@@ -551,6 +722,47 @@ stripe listen --forward-to localhost:8000/payment/webhook
 # Trigger a test event
 stripe trigger payment_intent.succeeded
 ```
+
+---
+
+## Hackathon Deliverables
+
+All required deliverables for the Panaversity Agent Factory Hackathon IV:
+
+| # | Deliverable | Format | Location | Status |
+|:---:|:---|:---:|:---|:---:|
+| 1 | Source Code | GitHub Repo | [This Repository](https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR) | Done |
+| 2 | README | Markdown | `README.md` | Done |
+| 3 | Architecture Diagram | Markdown | [`docs/architecture-diagram.md`](docs/architecture-diagram.md) | Done |
+| 4 | Spec Document | Markdown | [`docs/spec.md`](docs/spec.md) | Done |
+| 5 | Cost Analysis | Markdown | [`docs/cost-analysis.md`](docs/cost-analysis.md) | Done |
+| 6 | API Documentation | OpenAPI | [Swagger UI](https://naveed64-fatimazehra-ai-tutor-backend.hf.space/docs) | Done |
+| 7 | ChatGPT App Manifest | YAML | [`chatgpt-app-manifest.yaml`](chatgpt-app-manifest.yaml) | Done |
+| 8 | Agent Skills (4) | SKILL.md | [`.claude/skills/`](.claude/skills/) | Done |
+| 9 | Demo Video | MP4 | *(To be recorded)* | Pending |
+
+---
+
+## Cost Analysis Summary
+
+> Full analysis: [`docs/cost-analysis.md`](docs/cost-analysis.md)
+
+| Metric | Phase 1 (Zero-LLM) | Phase 3 (Web App) |
+|:---|---:|---:|
+| Monthly Cost (10K users) | **$5 - $30** | **~$281** |
+| Cost per User | $0.003 | $0.028 |
+| Monthly Revenue | $0 (ChatGPT) | $24,980 |
+| Profit Margin | N/A | **98.9%** |
+| Cost vs Human Tutor | **99% savings** | **85-99% savings** |
+
+### Human Tutor vs Digital FTE
+
+| | Human Tutor | FatimaZehra AI Tutor |
+|:---|---:|---:|
+| Availability | 40 hrs/week | **168 hrs/week** |
+| Cost/Session | $25 - $100 | **$0.01 - $0.48** |
+| Students/Tutor | 20-50 | **Unlimited** |
+| Consistency | 85-95% | **99%+** |
 
 ---
 
