@@ -76,7 +76,7 @@ export default function SignupPage() {
 
       if (signInResult?.ok) {
         setToast({ message: 'Account created successfully! Redirecting...', type: 'success' })
-        setTimeout(() => router.push('/dashboard'), 1500)
+        setTimeout(() => { window.location.href = '/dashboard' }, 1500)
       } else {
         setError(signInResult?.error || 'Auto-login failed after registration. Please try signing in manually.')
       }

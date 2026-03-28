@@ -2,13 +2,15 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, Lock, LogIn, Chrome } from 'lucide-react'
 import Toast from '@/components/Toast'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -35,7 +37,7 @@ export default function LoginPage() {
 
       if (result?.ok) {
         setToast({ message: 'Login successful! Redirecting...', type: 'success' })
-        setTimeout(() => router.push('/dashboard'), 1500)
+        setTimeout(() => { window.location.href = callbackUrl }, 1500)
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred. Please try again.'
