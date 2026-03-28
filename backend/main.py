@@ -52,6 +52,8 @@ app.add_middleware(
         "http://localhost:3001",
         "https://fatimazehraaitutor-yci1.vercel.app",
         "https://frontend-blue-kappa-15.vercel.app",
+        "https://chat.openai.com",
+        "https://chatgpt.com",
         os.getenv("NEXT_PUBLIC_APP_URL", "http://localhost:3000"),
     ],
     allow_credentials=True,
