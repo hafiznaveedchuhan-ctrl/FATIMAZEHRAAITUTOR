@@ -4,8 +4,14 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
 function getOpenAI() {
+  const apiKey = process.env.OPENAI_API_KEY
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY is not set')
+  }
   return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || '',
+    apiKey,
+    timeout: 30000, // 30 second timeout
+    maxRetries: 2,
   })
 }
 
@@ -141,9 +147,10 @@ export async function POST(req: Request) {
       },
     })
   } catch (error: unknown) {
-    console.error('Chat API error:', error)
-    const apiError = error as { status?: number; message?: string; code?: string; error?: { message?: string } }
+    console.error('Chat API error:', JSON.stringify(error, null, 2))
+    const apiError = error as any
 
+    // Handle specific OpenAI errors
     if (apiError?.status === 401 || apiError?.code === 'invalid_api_key') {
       return NextResponse.json({ error: 'Invalid OpenAI API key. Please check your OPENAI_API_KEY.' }, { status: 500 })
     }
@@ -154,7 +161,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'OpenAI quota exceeded. Please check your billing at platform.openai.com.' }, { status: 500 })
     }
 
-    const errMsg = apiError?.message || apiError?.error?.message || 'Failed to generate response'
-    return NextResponse.json({ error: errMsg }, { status: 500 })
+    // Handle network/connection errors
+    if (apiError?.code === 'ECONNREFUSED' || apiError?.code === 'ENOTFOUND' || apiError?.message?.includes('connect') || apiError?.message?.includes('ECONNREFUSED')) {
+      console.error('Connection error - OpenAI API unreachable')
+      return NextResponse.json({ error: 'Unable to connect to OpenAI API. Please try again in a moment.' }, { status: 503 })
+    }
+
+    // Generic error message with actual error details for logging
+    const errMsg = apiError?.message || (apiError instanceof Error ? apiError.message : 'Failed to generate response')
+    return NextResponse.json({ error: errMsg || 'Failed to generate response. Please try again.' }, { status: 500 })
   }
 }
