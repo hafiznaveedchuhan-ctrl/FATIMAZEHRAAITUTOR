@@ -1,560 +1,615 @@
-# FatimaZehra-AI-Tutor
+<div align="center">
 
-A world-class Python learning platform powered by AI coaching. Learn 10 chapters of Python with personalized learning paths, interactive quizzes, and GPT-4-powered AI assistance.
+# FatimaZehra AI Tutor
 
-**Hackathon**: Panaversity Agent Factory Hackathon IV
-**GitHub**: https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR
+### Your Personal AI-Powered Python Programming Tutor
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://frontend-blue-kappa-15.vercel.app)
+[![Backend API](https://img.shields.io/badge/Backend_API-HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://naveed64-fatimazehra-ai-tutor-backend.hf.space)
+[![GitHub](https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR)
+
+<br/>
+
+![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=flat-square&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/Neon_PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![OpenAI](https://img.shields.io/badge/GPT--4o-412991?style=flat-square&logo=openai&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=flat-square&logo=stripe&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
+
+<br/>
+
+**An interactive, AI-powered platform that teaches Python programming from basics to advanced concepts with real-time GPT-4o chat assistance, interactive quizzes, progress tracking, and a freemium subscription model.**
+
+<br/>
+
+[View Live App](https://frontend-blue-kappa-15.vercel.app) &nbsp;&bull;&nbsp; [API Documentation](https://naveed64-fatimazehra-ai-tutor-backend.hf.space/docs) &nbsp;&bull;&nbsp; [Report Bug](https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR/issues) &nbsp;&bull;&nbsp; [Request Feature](https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR/issues)
+
+</div>
 
 ---
 
-## Features
+## Table of Contents
 
-### Phase 1: MVP (Current)
-✅ **Auth**: Email signup/login + Google OAuth (NextAuth.js)
-✅ **10 Python Chapters**: Free (1-3), Premium (all), with MDX content
-✅ **Interactive Quizzes**: 10 MCQs per chapter, scoring, streak tracking
-✅ **AI Tutor**: GPT-4 streaming chat, context-aware assistance
-✅ **Progress Tracking**: Dashboard with stats, completion %, streaks
-✅ **Payments**: Stripe checkout, tier upgrades (Free, Premium $9.99, Pro $19.99)
-✅ **Dark/Light Mode**: Beautiful UI with WCAG AA accessibility
-✅ **Responsive**: Mobile-first design (all breakpoints tested)
-✅ **Profile Page**: Account details, subscription info, password change
+- [About the Project](#-about-the-project)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
+- [Python Course Curriculum](#-python-course-curriculum)
+- [Subscription Tiers](#-subscription-tiers)
+- [API Endpoints](#-api-endpoints)
+- [Database Schema](#-database-schema)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [Docker & Kubernetes](#-docker--kubernetes)
+- [Deployment](#-deployment)
+- [Project Structure](#-project-structure)
+- [Stripe Testing](#-stripe-testing)
+- [Contributing](#-contributing)
+- [Team](#-team)
 
-### Phase 2: AI Personalization (Planned)
-🔜 **Weak-Point Analysis**: GPT-4 reads quiz history, identifies gaps
-🔜 **Personalized Learning Path**: AI-ranked chapter recommendations
-🔜 **Spaced Repetition**: Smart review scheduling
-🔜 **Email Coach**: Weekly progress summaries + tips
+---
 
-### Phase 3: Production Ready (In Progress)
-✅ **Docker & Kubernetes**: Dockerfiles, docker-compose dev/prod, full K8s manifests (namespace, deployments, services, ingress, HPA — frontend + backend)
-🔜 **Admin Dashboard**: Analytics, revenue, user metrics
-🔜 **SEO & Performance**: Lighthouse ≥ 90, sitemap, metadata
-🔜 **Monitoring**: Sentry error tracking, custom metrics
+## About the Project
+
+**FatimaZehra AI Tutor** is a comprehensive, full-stack AI-powered learning platform built for the **Panaversity Agent Factory Hackathon IV**. It provides an interactive Python programming course with 10 structured chapters, real-time AI chat assistance powered by **OpenAI GPT-4o**, quizzes with instant feedback, progress tracking, and a Stripe-integrated freemium subscription model.
+
+### What Makes It Special
+
+- **AI-Powered Learning** - Real-time streaming chat with GPT-4o that adapts to your current chapter context
+- **Structured Curriculum** - 10 professionally written chapters from Python Basics to Advanced Concepts
+- **Interactive Quizzes** - 10 MCQ questions per chapter with detailed explanations
+- **Progress Tracking** - Track completed chapters, quiz scores, and learning streaks
+- **Freemium Model** - Start free with 3 chapters, upgrade for full access and unlimited AI
+- **Production Ready** - Docker, Kubernetes, CI/CD, health checks - built for scale
+
+---
+
+## Key Features
+
+<table>
+<tr>
+<td width="50%">
+
+### Authentication & Security
+- Email/password registration & login
+- Google OAuth 2.1 integration
+- JWT-based session management (httpOnly cookies)
+- Protected routes with Next.js middleware
+- Real-time password strength validation
+
+</td>
+<td width="50%">
+
+### AI Chat Assistant
+- Real-time streaming responses from GPT-4o
+- Context-aware tutoring (knows your current chapter)
+- Python code syntax highlighting
+- Tier-based rate limiting (5/50/unlimited per day)
+- Conversation history support
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Course Content
+- 10 structured Python chapters
+- Progressive difficulty (Beginner to Advanced)
+- MDX-based rich content rendering
+- Working code examples in every chapter
+- Real-world use cases and best practices
+
+</td>
+<td width="50%">
+
+### Stripe Payments
+- Secure checkout integration (TEST MODE)
+- Three subscription tiers (Free / Premium / Pro)
+- Webhook-based subscription management
+- Automatic tier upgrade on successful payment
+- Test card: `4242 4242 4242 4242`
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Progress & Analytics
+- Chapter completion tracking
+- Quiz score history with pass/fail
+- Learning streak counter
+- Visual progress dashboard
+- Per-chapter completion percentage
+
+</td>
+<td width="50%">
+
+### Production Infrastructure
+- Docker containerization (dev + prod)
+- Kubernetes orchestration (2-10 replicas)
+- Rolling update deployment strategy
+- Health checks & readiness probes
+- Nginx Ingress Controller
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 14 (App Router), React 18, TypeScript |
-| **Styling** | Tailwind CSS, shadcn/ui (Radix UI), Framer Motion |
-| **Backend** | FastAPI, Python 3.12, SQLModel |
-| **Database** | PostgreSQL 16 (Neon), SQLModel ORM |
-| **Auth** | NextAuth.js, JWT, Google OAuth 2.1 |
-| **AI** | OpenAI GPT-4, streaming completions |
-| **Payments** | Stripe (TEST MODE) |
-| **Testing** | pytest (backend), Vitest (frontend), browser-use (E2E) |
-| **Cache** | Upstash Redis (Phase 3) |
-| **Monitoring** | Sentry |
-| **Containers** | Docker, Docker Compose |
-| **Orchestration** | Kubernetes |
+### Frontend
+
+| Technology | Purpose |
+|:---|:---|
+| **Next.js 14** (App Router) | React framework with SSR/SSG |
+| **TypeScript** | Type-safe development |
+| **Tailwind CSS** | Utility-first styling |
+| **NextAuth.js** | Authentication (JWT strategy) |
+| **Lucide React** | Modern icon library |
+| **React Markdown** | Markdown/code rendering in chat |
+
+### Backend
+
+| Technology | Purpose |
+|:---|:---|
+| **FastAPI** | High-performance Python API framework |
+| **Python 3.12** | Backend language |
+| **SQLModel** | ORM (SQLAlchemy + Pydantic hybrid) |
+| **Neon PostgreSQL** | Serverless Postgres database |
+| **Uvicorn** | ASGI server |
+| **Alembic** | Database migrations |
+
+### Services & Infrastructure
+
+| Technology | Purpose |
+|:---|:---|
+| **OpenAI GPT-4o** | AI chat completions with streaming |
+| **Stripe** | Payment processing (TEST MODE) |
+| **Vercel** | Frontend hosting & auto-deploy |
+| **HuggingFace Spaces** | Backend API hosting |
+| **Docker + Compose** | Containerization (dev & prod) |
+| **Kubernetes** | Container orchestration with HPA |
+| **Playwright** | End-to-end browser testing |
+| **Sentry** | Error tracking & monitoring |
 
 ---
 
-## Quick Start
+## Architecture
 
-### Prerequisites
-- **Node.js 20+** (frontend): `node --version`
-- **Python 3.12+** (backend): `python --version`
-- **PostgreSQL** (local or Neon): Connection string
-- **OpenAI API Key**: https://platform.openai.com/api-keys
-- **Stripe Account** (TEST MODE): https://stripe.com
-
-### 1. Clone & Setup
-
-```bash
-git clone https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR.git
-cd FATIMAZEHRAAITUTOR
-
-# Copy environment template
-cp .env.example .env.local
 ```
-
-### 2. Fill Environment Variables
-
-Edit `.env.local` with your keys:
-
-```bash
-# Required
-OPENAI_API_KEY=sk-...
-DATABASE_URL=postgresql+asyncpg://user:pass@host/db
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_PUBLISHABLE_KEY=pk_test_...
-NEXTAUTH_SECRET=$(openssl rand -base64 32)
-NEXTAUTH_URL=http://localhost:3000
-
-# Optional (Phase 2+)
-REDIS_URL=
-SENTRY_DSN=
-RESEND_API_KEY=
-```
-
-### 3. Frontend Setup
-
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-# → http://localhost:3000
-```
-
-### 4. Backend Setup
-
-```bash
-cd backend
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run migrations (Alembic)
-alembic upgrade head
-
-# Run development server
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
-# → http://localhost:8000
-```
-
-### 5. Test the App
-
-Open http://localhost:3000 in browser:
-
-1. **Signup**: Create account with email/password
-2. **Explore**: Browse chapter list (1-3 free, 4-10 locked)
-3. **Learn**: Open chapter 1, read content, ask AI questions
-4. **Quiz**: Complete chapter 1 quiz (10 MCQs)
-5. **Dashboard**: View progress, streaks, stats
-6. **Upgrade**: Go to /pricing, click "Upgrade to Premium"
-7. **Stripe Checkout**: Use test card `4242 4242 4242 4242`
-   - Expiry: Any future date (e.g., 12/25)
-   - CVC: Any 3 digits (e.g., 123)
-8. **Unlock**: After payment, all 10 chapters visible
-
----
-
-## Docker Setup
-
-### Local Development (docker-compose)
-
-```bash
-# Build and run all services (frontend, backend, postgres, redis)
-docker-compose up --build
-
-# Services start:
-# - Frontend: http://localhost:3000
-# - Backend: http://localhost:8000
-# - PostgreSQL: localhost:5432
-# - Redis: localhost:6379
-```
-
-Stop:
-```bash
-docker-compose down
-```
-
-### Production (docker-compose.prod.yml)
-
-Uses external database (Neon) and Redis (Upstash):
-
-```bash
-docker-compose -f docker-compose.prod.yml up --build
+                          +---------------------------+
+                          |      Users (Browser)      |
+                          +------------+--------------+
+                                       |
+                                       v
++----------------------------------------------------------------------+
+|                   FRONTEND  (Next.js 14 on Vercel)                    |
+|                                                                      |
+|   +----------+   +-----------+   +----------+   +----------------+   |
+|   |   Auth   |   |  Learn /  |   |   Chat   |   |   Payments     |   |
+|   | NextAuth |   | Chapters  |   |  GPT-4o  |   |   (Stripe)     |   |
+|   |  + JWT   |   |           |   | Streaming|   |                |   |
+|   +----------+   +-----------+   +----------+   +----------------+   |
+|                                                                      |
+|              API Routes: /api/chat  /api/auth  /api/stripe           |
++----------------------------------------------------------------------+
+                                       |
+                                       | HTTPS
+                                       v
++----------------------------------------------------------------------+
+|              BACKEND  (FastAPI on HuggingFace Spaces)                 |
+|                                                                      |
+|   +----------+   +-----------+   +----------+   +----------------+   |
+|   | Auth API |   | Chapters  |   |   Quiz   |   |   Progress     |   |
+|   | /auth/*  |   | /chapters |   |  /quiz   |   |  /progress     |   |
+|   +----------+   +-----------+   +----------+   +----------------+   |
++----------------------------------------------------------------------+
+                                       |
+                                       v
++----------------------------------------------------------------------+
+|                  DATABASE  (Neon PostgreSQL - Serverless)              |
+|                                                                      |
+|   users  |  chapters  |  quiz_questions  |  user_progress            |
+|   quiz_attempts  |  subscriptions                                    |
++----------------------------------------------------------------------+
 ```
 
 ---
 
-## Kubernetes Deployment
+## Python Course Curriculum
 
-### Prerequisites
-- kubectl configured
-- Docker images built and pushed to registry
-- K8s cluster running (Docker Desktop, Minikube, or cloud)
+| # | Chapter | Difficulty | Tier | Topics Covered |
+|:---:|:---|:---:|:---:|:---|
+| 1 | **Python Basics & Variables** | Beginner | Free | Data types, variables, operators, I/O |
+| 2 | **Control Flow & Loops** | Beginner | Free | if/elif/else, for/while loops, break/continue |
+| 3 | **Functions & Scope** | Beginner | Free | Defining functions, parameters, return values, scope |
+| 4 | **Object Oriented Programming** | Intermediate | Premium | Classes, objects, inheritance, polymorphism |
+| 5 | **Modules & Packages** | Intermediate | Premium | Importing, creating packages, pip, virtual envs |
+| 6 | **File Handling** | Intermediate | Premium | Reading/writing files, CSV, JSON, context managers |
+| 7 | **Exception Handling** | Intermediate | Premium | try/except, custom exceptions, debugging |
+| 8 | **APIs & Requests** | Intermediate | Premium | HTTP methods, REST APIs, requests library |
+| 9 | **Decorators & Generators** | Advanced | Pro | Function decorators, generators, yield |
+| 10 | **Advanced Python Concepts** | Advanced | Pro | Metaclasses, descriptors, async/await, patterns |
 
-### Deploy
-
-```bash
-# Create namespace
-kubectl apply -f k8s/namespace.yaml
-
-# Create configmaps & secrets
-kubectl apply -f k8s/configmaps/
-kubectl apply -f k8s/secrets/  # Update with real values
-
-# Deploy frontend & backend
-kubectl apply -f k8s/frontend/
-kubectl apply -f k8s/backend/
-kubectl apply -f k8s/ingress/
-
-# Verify
-kubectl get pods -n fatimazehra-ai-tutor
-kubectl get svc -n fatimazehra-ai-tutor
-```
-
-Port-forward for local testing:
-
-```bash
-# Frontend
-kubectl port-forward svc/frontend 3000:3000 -n fatimazehra-ai-tutor
-
-# Backend
-kubectl port-forward svc/backend 8000:8000 -n fatimazehra-ai-tutor
-```
+> Each chapter includes complete theory, working code examples, and **10 MCQ quiz questions** with detailed explanations.
 
 ---
 
-## API Documentation
+## Subscription Tiers
+
+<table>
+<tr>
+<td align="center" width="33%">
+
+### Free
+#### $0/month
+
+---
+
+- Chapters 1-3
+- Basic quiz access
+- 5 AI chat messages/day
+- Progress tracking
+- Community support
+
+</td>
+<td align="center" width="33%">
+
+### Premium
+#### $9.99/month
+
+---
+
+- **All 10 chapters**
+- Unlimited quizzes
+- 50 AI chat messages/day
+- Full progress analytics
+- Priority support
+
+</td>
+<td align="center" width="33%">
+
+### Pro
+#### $19.99/month
+
+---
+
+- Everything in Premium
+- **Unlimited AI chat**
+- Weak-point analysis
+- Personalized learning paths
+- Email coaching (coming soon)
+
+</td>
+</tr>
+</table>
+
+---
+
+## API Endpoints
 
 ### Authentication
-
 ```
-POST /auth/register
-  Body: { email, password, name }
-  Response: { user_id, email, token }
-
-POST /auth/login
-  Body: { email, password }
-  Response: { user_id, email, token }
-
-GET /auth/me
-  Headers: Authorization: Bearer {token}
-  Response: { user_id, email, name, tier, subscription_expires_at }
-
-POST /auth/change-password
-  Headers: Authorization: Bearer {token}
-  Body: { current_password, new_password }
-  Response: { message }
+POST   /auth/register            Register new user
+POST   /auth/login               Login with credentials
+POST   /auth/google-callback     Google OAuth callback
+GET    /auth/me                  Get current user profile
+POST   /auth/logout              Logout user
+POST   /auth/change-password     Change password
 ```
 
-### Chapters
-
+### Chapters & Learning
 ```
-GET /chapters
-  Response: [{ id, number, title, slug, tier_required, progress }]
-
-GET /chapters/{id}
-  Response: { id, title, content_mdx, quiz_questions }
+GET    /chapters                 List all chapters
+GET    /chapters/{id}            Get chapter content (MDX)
 ```
 
-### Quiz
-
+### Quizzes
 ```
-GET /quiz/{chapter_id}
-  Response: { questions: [{ id, question, options }] }
-
-POST /quiz/submit
-  Body: { chapter_id, answers: [{ question_id, selected_option }] }
-  Response: { score, passed, results: [{ correct_option, explanation }] }
+GET    /quiz/{chapter_id}        Get quiz questions for chapter
+POST   /quiz/submit              Submit quiz answers and get score
 ```
 
 ### Progress
-
 ```
-GET /progress/{user_id}
-  Response: { chapters_completed, quiz_scores, average_score, streak_days }
-
-POST /progress/mark-complete
-  Body: { chapter_id }
-  Response: { success, updated_progress }
+GET    /progress/{user_id}       Get user progress & stats
+POST   /progress/mark-complete   Mark chapter as completed
 ```
 
 ### Payments
-
 ```
-POST /payment/create-session
-  Body: { plan: "premium"|"pro" }
-  Response: { session_url }
-
-POST /payment/webhook
-  (Stripe sends raw event; webhook handler updates user tier)
+POST   /payment/create-session   Create Stripe checkout session
+POST   /payment/webhook          Stripe webhook handler
 ```
 
 ### AI Chat
-
 ```
-POST /api/chat
-  Body: { message, chapter_id? }
-  Response: SSE stream (streaming GPT-4 response)
-
-GET /chat/rate-limit
-  Response: { remaining, reset_at }
+POST   /api/chat                 Stream AI response (GPT-4o)
 ```
+
+> Full interactive API docs available at: [Backend /docs](https://naveed64-fatimazehra-ai-tutor-backend.hf.space/docs)
 
 ---
 
-## Testing
+## Database Schema
 
-### Backend (pytest)
+| Table | Key Columns | Purpose |
+|:---|:---|:---|
+| `users` | id, email, name, hashed_password, tier, created_at | User accounts & authentication |
+| `chapters` | id, number, title, slug, content_mdx, tier_required | Course content storage |
+| `quiz_questions` | id, chapter_id, question, options (JSONB), correct_answer, explanation | Quiz MCQ questions |
+| `quiz_attempts` | id, user_id, chapter_id, answers (JSONB), score, completed_at | Quiz submission history |
+| `user_progress` | id, user_id, chapter_id, completed, last_accessed_at | Chapter completion tracking |
+| `subscriptions` | id, user_id, stripe_customer_id, stripe_sub_id, plan, status, expires_at | Payment & subscription management |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** 18+ and **npm**
+- **Python** 3.12+
+- **PostgreSQL** (or [Neon](https://neon.tech) account)
+- **OpenAI API Key** ([platform.openai.com](https://platform.openai.com/api-keys))
+- **Stripe Account** in TEST MODE ([stripe.com](https://stripe.com))
+
+### Installation
 
 ```bash
-cd backend
-
-# Run all tests
-pytest -v --cov=src --cov-report=term-missing
-
-# Run specific test file
-pytest tests/test_auth.py -v
-
-# Coverage report
-pytest --cov=src --cov-report=html
-# Open htmlcov/index.html
+# Clone the repository
+git clone https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR.git
+cd FATIMAZEHRAAITUTOR
 ```
 
-### Frontend (Vitest + browser-use)
+#### Frontend Setup
 
 ```bash
 cd frontend
+npm install
+cp .env.example .env.local     # Fill in your environment variables
+npm run dev                     # Starts on http://localhost:3000
+```
 
-# Unit tests
-npm run test
+#### Backend Setup
 
-# E2E tests (browser-use)
-# Manual testing via browser-use skill
-npm run dev
-# Then open localhost:3000 in browser and test user flows
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env            # Fill in your environment variables
+alembic upgrade head            # Run database migrations
+uvicorn main:app --reload --port 8000
 ```
 
 ---
 
-## Stripe TEST MODE
+## Environment Variables
 
-### Test Card
+Create `.env.local` (frontend) and `.env` (backend) from the example templates:
 
-Use this card for all test payments:
+| Variable | Description | Required |
+|:---|:---|:---:|
+| `OPENAI_API_KEY` | OpenAI API key for GPT-4o | Yes |
+| `STRIPE_SECRET_KEY` | Stripe secret key (`sk_test_...`) | Yes |
+| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key (`pk_test_...`) | Yes |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret | Yes |
+| `DATABASE_URL` | Neon PostgreSQL connection string | Yes |
+| `NEXTAUTH_SECRET` | Random secret for NextAuth JWT | Yes |
+| `NEXTAUTH_URL` | App URL (`http://localhost:3000`) | Yes |
+| `NEXT_PUBLIC_APP_URL` | Public app URL | Yes |
+| `NEXT_PUBLIC_API_URL` | Backend API URL | Yes |
+| `BACKEND_URL` | Internal backend URL | Yes |
+| `REDIS_URL` | Upstash Redis URL | No |
+| `SENTRY_DSN` | Sentry error tracking DSN | No |
+| `RESEND_API_KEY` | Resend email service key | No |
 
-```
-Card Number: 4242 4242 4242 4242
-Expiry: Any future date (e.g., 12/25)
-CVC: Any 3 digits (e.g., 123)
-```
+> **Important:** Never commit `.env` files. Use `.env.example` as a template.
 
-### Webhook Testing (Local)
+---
 
-Use [Stripe CLI](https://stripe.com/docs/stripe-cli) to test webhooks locally:
+## Docker & Kubernetes
+
+### Docker (Local Development)
 
 ```bash
+# Build and run all services
+docker-compose up --build
+
+# Services:
+#   Frontend  → http://localhost:3000
+#   Backend   → http://localhost:8000
+#   PostgreSQL → localhost:5432
+#   Redis     → localhost:6379
+
+# Stop all services
+docker-compose down
+```
+
+### Docker (Production)
+
+```bash
+docker-compose -f docker-compose.prod.yml up --build -d
+```
+
+### Kubernetes
+
+```bash
+# Apply all manifests
+kubectl apply -f k8s/
+
+# Verify deployment
+kubectl get pods -n fatimazehra-ai-tutor
+kubectl get svc -n fatimazehra-ai-tutor
+
+# Port-forward for local testing
+kubectl port-forward svc/frontend 3000:3000 -n fatimazehra-ai-tutor
+kubectl port-forward svc/backend 8000:8000 -n fatimazehra-ai-tutor
+```
+
+**Kubernetes Configuration:**
+
+| Setting | Value |
+|:---|:---|
+| Namespace | `fatimazehra-ai-tutor` |
+| Min Replicas | 2 |
+| Max Replicas | 10 |
+| Strategy | RollingUpdate |
+| CPU Limit | 500m |
+| Memory Limit | 512Mi |
+| Health Check | `/health` endpoint |
+| Ingress | Nginx Ingress Controller |
+
+---
+
+## Deployment
+
+### Production URLs
+
+| Service | Platform | URL |
+|:---|:---|:---|
+| **Frontend** | Vercel | **[https://frontend-blue-kappa-15.vercel.app](https://frontend-blue-kappa-15.vercel.app)** |
+| **Backend API** | HuggingFace Spaces | **[https://naveed64-fatimazehra-ai-tutor-backend.hf.space](https://naveed64-fatimazehra-ai-tutor-backend.hf.space)** |
+| **Database** | Neon PostgreSQL | Serverless (US East) |
+
+> The frontend auto-deploys on every push to `main` via Vercel Git integration. No manual redeployment needed.
+
+---
+
+## Project Structure
+
+```
+FatimaZehra-AI-Tutor/
+|
++-- frontend/                       # Next.js 14 Application
+|   +-- app/                        # App Router pages
+|   |   +-- auth/                   # Login & Signup pages
+|   |   +-- dashboard/              # User dashboard
+|   |   +-- learn/                  # Chapter learning pages
+|   |   +-- chat/                   # AI Chat interface
+|   |   +-- pricing/                # Subscription plans
+|   |   +-- profile/                # User profile
+|   |   +-- api/                    # API routes (chat, auth, stripe)
+|   +-- components/                 # Reusable UI components
+|   +-- lib/                        # Auth config, utilities
+|   +-- public/                     # Static assets
+|   +-- middleware.ts               # Route protection
+|   +-- tailwind.config.ts          # Tailwind CSS config
+|   +-- next.config.js              # Next.js config
+|
++-- backend/                        # FastAPI Application
+|   +-- main.py                     # App entry point
+|   +-- models/                     # SQLModel database models
+|   +-- routes/                     # API route handlers
+|   +-- services/                   # Business logic
+|   +-- alembic/                    # Database migrations
+|   +-- requirements.txt            # Python dependencies
+|   +-- Dockerfile                  # Backend container
+|
++-- k8s/                            # Kubernetes manifests
+|   +-- namespace.yaml
+|   +-- frontend/                   # Frontend deployment + service
+|   +-- backend/                    # Backend deployment + service
+|   +-- ingress/                    # Ingress configuration
+|
++-- docker-compose.yml              # Local development
++-- docker-compose.prod.yml         # Production config
++-- .env.example                    # Environment variable template
++-- README.md                       # This file
+```
+
+---
+
+## Stripe Testing
+
+Use these test credentials for development:
+
+| Field | Value |
+|:---|:---|
+| **Card Number** | `4242 4242 4242 4242` |
+| **Expiry** | Any future date (e.g., `12/28`) |
+| **CVC** | Any 3 digits (e.g., `123`) |
+
+### Local Webhook Testing
+
+```bash
+# Install Stripe CLI
 stripe login
+
+# Forward webhooks to local backend
 stripe listen --forward-to localhost:8000/payment/webhook
 
-# In another terminal, trigger test event:
+# Trigger a test event
 stripe trigger payment_intent.succeeded
 ```
-
-The webhook handler will:
-1. Verify signature
-2. Update user tier to premium/pro
-3. Create subscription record in DB
-
----
-
-## Development Workflow
-
-### 1. Create Feature Branch
-
-```bash
-git checkout -b feat/feature-name
-```
-
-### 2. Make Changes
-
-- Write spec first (in `.specify/`)
-- Implement code
-- Write tests (pytest for backend, vitest for frontend)
-- Test locally (dev servers, E2E flows)
-
-### 3. Commit & Push
-
-```bash
-git add .
-git commit -m "feat: feature-name - FatimaZehra-AI-Tutor"
-git push origin feat/feature-name
-```
-
-### 4. Create PR
-
-```bash
-gh pr create --title "feat: feature-name" --body "Description"
-```
-
-### 5. Merge to Main
-
-After review + tests pass:
-```bash
-git checkout main
-git pull origin main
-git merge feat/feature-name
-git push origin main
-```
-
----
-
-## Debugging
-
-### Frontend Issues
-
-```bash
-# Check browser console (F12)
-# Check network tab for API errors
-# Check Application → Cookies for auth token
-
-# Clear cache & reload
-Ctrl+Shift+Delete (or Cmd+Shift+Delete on Mac)
-```
-
-### Backend Issues
-
-```bash
-# Check uvicorn console output
-# Check database connection:
-psql $DATABASE_URL -c "SELECT 1;"
-
-# Check OpenAI API:
-curl https://api.openai.com/v1/models \
-  -H "Authorization: Bearer $OPENAI_API_KEY"
-
-# Debug with print statements or pdb:
-import pdb; pdb.set_trace()
-```
-
-### Database Issues
-
-```bash
-# Connect to Neon PostgreSQL:
-psql $DATABASE_URL
-
-# List tables:
-\dt
-
-# Check user_progress:
-SELECT * FROM user_progress;
-
-# Check quiz_attempts:
-SELECT * FROM quiz_attempts WHERE user_id = '<USER_ID>';
-```
-
----
-
-## Performance
-
-### Frontend Targets
-
-- **LCP** (Largest Contentful Paint): < 2.5s
-- **CLS** (Cumulative Layout Shift): < 0.1
-- **TTL** (Time to Interactive): < 3.8s
-- **Lighthouse Score**: ≥ 90
-
-Check with:
-```bash
-npm run build
-npm run start
-# Open http://localhost:3000 in Chrome
-# DevTools → Lighthouse → Generate report
-```
-
-### Backend Targets
-
-- **Response time** p95: < 500ms
-- **Error rate**: < 1%
-- **Database query time**: < 100ms
-
----
-
-## Monitoring & Alerts
-
-### Sentry Error Tracking
-
-1. Create account: https://sentry.io
-2. Create project (Next.js + Python)
-3. Add DSN to `.env`: `SENTRY_DSN=...`
-4. Dashboard: https://sentry.io/organizations/...
-5. View errors, set up alerts
-
-### Metrics (Phase 3)
-
-- API response times (Prometheus)
-- User events (Google Analytics)
-- Payment metrics (Stripe Dashboard)
-- Email delivery rates (Resend Dashboard)
-
----
-
-## Known Issues & TODOs
-
-### Phase 1
-- [ ] Google OAuth not fully implemented (NextAuth stub)
-- [ ] Rate limiting stubbed (no Redis in Phase 1)
-- [ ] Email notifications not sent (Resend Phase 2+)
-- [ ] Admin dashboard not available
-
-### Phase 2
-- [ ] Weak-point analysis not implemented
-- [ ] Personalized learning paths stubbed
-- [ ] Spaced repetition algorithm not integrated
-- [ ] Email coach feature pending
-
-### Phase 3
-- [x] Docker & K8s configs created (see `k8s/` and `docker-compose.prod.yml`)
-- [ ] CI/CD pipeline (GitHub Actions) not configured
-- [ ] Advanced caching (Redis) not implemented
-- [ ] Multi-region failover not setup
 
 ---
 
 ## Contributing
 
-### Code Standards
+Contributions are welcome! Please follow these steps:
 
-- **Frontend**: TypeScript strict mode, Tailwind CSS, shadcn/ui components
-- **Backend**: Python type hints, Ruff linting, ≥ 80% test coverage
-- **Git**: Commit format: `feat: [name] - FatimaZehra-AI-Tutor`
-- **Specs**: Update `.specify/` before code changes
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feat/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'feat: add amazing feature - FatimaZehra-AI-Tutor'`)
+4. **Push** to the branch (`git push origin feat/amazing-feature`)
+5. **Open** a Pull Request
 
-### Review Process
+### Commit Convention
 
-1. Create feature branch
-2. Implement + test locally
-3. Create PR with description
-4. Pass: tests, linting, type checking
-5. Get approval
-6. Merge to main
-
----
-
-## Support & Contact
-
-- **Issues**: [GitHub Issues](https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR/issues)
-- **Email**: hafiznaveedchuhan@example.com (placeholder)
-- **Docs**: See `.specify/` for detailed specs and ADRs
+```
+feat: new feature - FatimaZehra-AI-Tutor
+fix: bug fix - FatimaZehra-AI-Tutor
+docs: documentation update - FatimaZehra-AI-Tutor
+refactor: code refactoring - FatimaZehra-AI-Tutor
+test: add/update tests - FatimaZehra-AI-Tutor
+```
 
 ---
 
-## License
+## Team
 
-MIT License — See LICENSE file
+<div align="center">
 
----
+Built for the **Panaversity Agent Factory Hackathon IV**
 
-## Acknowledgments
+**FatimaZehra AI Tutor Team**
 
-Built for **Panaversity Agent Factory Hackathon IV**
+[![GitHub](https://img.shields.io/badge/hafiznaveedchuhan--ctrl-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/hafiznaveedchuhan-ctrl)
 
-**Key Technologies**:
-- Next.js team for App Router
-- FastAPI team for async framework
-- OpenAI for GPT-4 API
-- Stripe for payment processing
-- Neon for PostgreSQL hosting
+</div>
 
 ---
 
-**Happy Learning! 🐍🚀**
+## Development Phases
 
-Questions? Check out the project specs in `.specify/` or open an issue on GitHub.
-# FATIMAZEHRAAITUTOR
+| Phase | Focus | Status |
+|:---|:---|:---:|
+| **Phase 1** | MVP - Auth, Chapters, Quiz, Stripe, AI Chat | Complete |
+| **Phase 2** | AI Personalization - Weak-point analysis, Learning paths, Email coach | Planned |
+| **Phase 3** | Production - Docker, K8s, Admin dashboard, SEO, Monitoring | In Progress |
+
+---
+
+<div align="center">
+
+### If you found this project helpful, please give it a star!
+
+<br/>
+
+**[View Live App](https://frontend-blue-kappa-15.vercel.app)** &nbsp;&bull;&nbsp; **[API Docs](https://naveed64-fatimazehra-ai-tutor-backend.hf.space/docs)** &nbsp;&bull;&nbsp; **[Report Issue](https://github.com/hafiznaveedchuhan-ctrl/FATIMAZEHRAAITUTOR/issues)**
+
+<br/>
+
+<sub>Built with Next.js, FastAPI, GPT-4o & Stripe | Panaversity Agent Factory Hackathon IV</sub>
+
+</div>
