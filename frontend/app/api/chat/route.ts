@@ -5,13 +5,17 @@ import { authOptions } from '@/lib/auth'
 
 function getOpenAI() {
   const apiKey = process.env.OPENAI_API_KEY
+  console.log('🔍 OpenAI init - Key present:', !!apiKey, 'Key length:', apiKey?.length || 0)
   if (!apiKey) {
-    throw new Error('OPENAI_API_KEY is not set')
+    throw new Error('OPENAI_API_KEY is not set in environment')
+  }
+  if (!apiKey.startsWith('sk-')) {
+    throw new Error('OPENAI_API_KEY does not start with sk-')
   }
   return new OpenAI({
     apiKey,
-    timeout: 30000, // 30 second timeout
-    maxRetries: 2,
+    timeout: 60000,
+    maxRetries: 1,
   })
 }
 
