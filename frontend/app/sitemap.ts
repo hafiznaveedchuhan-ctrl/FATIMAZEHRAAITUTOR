@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://frontend-blue-kappa-15.vercel.app'
+  const base = 'https://fatimazehraaitutor-yci1.vercel.app'
 
   return [
     { url: base, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },

@@ -6,14 +6,14 @@ import './globals.css'
 // The DSN is safe to expose publicly — it only allows sending events, not reading them.
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://frontend-blue-kappa-15.vercel.app'),
+  metadataBase: new URL('https://fatimazehraaitutor-yci1.vercel.app'),
   title: 'FatimaZehra AI Tutor - Learn Python with AI',
   description: 'Master Python with AI-powered personalized learning paths. Free chapters 1-3, Premium access to all 10 chapters.',
   icons: { icon: '/icon.svg' },
   openGraph: {
     title: 'FatimaZehra AI Tutor - Learn Python with AI',
     description: 'Master Python with AI-powered personalized learning paths, quizzes, and weakness analysis.',
-    url: 'https://frontend-blue-kappa-15.vercel.app',
+    url: 'https://fatimazehraaitutor-yci1.vercel.app',
     siteName: 'FatimaZehra AI Tutor',
     type: 'website',
   },

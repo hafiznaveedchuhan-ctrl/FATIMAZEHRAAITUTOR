@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/dashboard/'],
     },
-    sitemap: 'https://frontend-blue-kappa-15.vercel.app/sitemap.xml',
+    sitemap: 'https://fatimazehraaitutor-yci1.vercel.app/sitemap.xml',
   }
 }
