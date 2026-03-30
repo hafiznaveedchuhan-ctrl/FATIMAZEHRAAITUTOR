@@ -125,7 +125,7 @@ function MessageContent({ content, isStreaming }: { content: string; isStreaming
         return (
           <p
             key={i}
-            className="text-sm leading-relaxed text-gray-200 whitespace-pre-wrap"
+            className="text-sm leading-relaxed text-white whitespace-pre-wrap"
             dangerouslySetInnerHTML={{
               __html: seg.value
                 .replace(/`([^`]+)`/g, '<code class="bg-white/10 text-indigo-300 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
@@ -497,7 +497,7 @@ function ChatPageContent() {
                     : 'Ask about Python… (Enter to send, Shift+Enter for newline)'
                 }
                 rows={1}
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-indigo-500 resize-none transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none transition disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ minHeight: '48px', maxHeight: '160px' }}
               />
               <button
