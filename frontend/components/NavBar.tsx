@@ -17,12 +17,15 @@ const tierConfig = {
 export default function NavBar() {
   const { data: session } = useSession()
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [liveTier, setLiveTier] = useState<string | null>(null)
   const pathname = usePathname()
   const userMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => { setMounted(true) }, [])
 
   // Fetch live tier from backend to bypass stale JWT after upgrades
   useEffect(() => {
@@ -71,18 +74,11 @@ export default function NavBar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-500 ${
+      className={`sticky top-0 z-50 transition-all duration-500 border-b ${
         scrolled
-          ? 'backdrop-blur-2xl border-b shadow-2xl'
-          : 'backdrop-blur-xl border-b'
+          ? 'backdrop-blur-2xl shadow-2xl nav-bg-scrolled'
+          : 'backdrop-blur-xl nav-bg'
       }`}
-      style={{
-        background: scrolled
-          ? 'linear-gradient(135deg, rgba(60,0,120,0.85) 0%, rgba(20,10,60,0.90) 40%, rgba(10,20,80,0.88) 70%, rgba(80,10,80,0.82) 100%)'
-          : 'linear-gradient(135deg, rgba(60,0,120,0.55) 0%, rgba(20,10,60,0.60) 40%, rgba(10,20,80,0.55) 70%, rgba(80,10,80,0.50) 100%)',
-        borderColor: scrolled ? 'rgba(139,92,246,0.40)' : 'rgba(139,92,246,0.20)',
-        boxShadow: scrolled ? '0 4px 40px rgba(108,99,255,0.18), 0 1px 0 rgba(236,72,153,0.15)' : 'none',
-      }}
     >
       <div className="container py-3">
         <div className="flex justify-between items-center">
@@ -105,8 +101,8 @@ export default function NavBar() {
                 href={link.href}
                 className={`nav-link-underline px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive(link.href)
-                    ? 'text-white bg-white/5'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'dark:text-white text-gray-900 bg-white/5'
+                    : 'dark:text-gray-400 text-gray-600 dark:hover:text-white hover:text-gray-900 hover:bg-white/5'
                 }`}
               >
                 {link.label}
@@ -134,7 +130,9 @@ export default function NavBar() {
               aria-label="Toggle theme"
             >
               <div className="relative w-5 h-5">
-                {theme === 'dark' ? (
+                {!mounted ? (
+                  <div className="w-5 h-5" />
+                ) : theme === 'dark' ? (
                   <Sun className="w-5 h-5 text-yellow-400 transition-transform group-hover:rotate-45 duration-300" />
                 ) : (
                   <Moon className="w-5 h-5 text-indigo-400 transition-transform group-hover:-rotate-12 duration-300" />
@@ -153,7 +151,7 @@ export default function NavBar() {
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#6C63FF] to-[#EC4899] flex items-center justify-center text-white font-semibold text-xs">
                     {session.user?.name?.charAt(0)?.toUpperCase() || 'U'}
                   </div>
-                  <span className="text-sm text-gray-300 max-w-[100px] truncate">
+                  <span className="text-sm dark:text-gray-300 text-gray-700 max-w-[100px] truncate">
                     {session.user?.name || 'User'}
                   </span>
                   <ChevronDown className={`w-3.5 h-3.5 text-gray-500 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
@@ -221,7 +219,7 @@ export default function NavBar() {
               <div className="hidden md:flex items-center gap-2">
                 <Link
                   href="/auth/login"
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-white border border-white/10 hover:border-white/20 hover:bg-white/5 transition-all"
+                  className="px-4 py-2 rounded-xl text-sm font-medium dark:text-gray-300 text-gray-600 dark:hover:text-white hover:text-gray-900 border dark:border-white/10 border-gray-200 dark:hover:border-white/20 hover:border-gray-300 hover:bg-white/5 transition-all"
                 >
                   Sign In
                 </Link>

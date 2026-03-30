@@ -46,12 +46,7 @@ export default function Footer() {
       <div className="h-px bg-gradient-to-r from-[#3B82F6]/60 via-[#F59E0B]/40 to-[#6C63FF]/60 mt-px" />
       <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-px" />
 
-      <div className="backdrop-blur-xl pt-16 pb-8"
-        style={{
-          background: 'linear-gradient(160deg, rgba(45,0,100,0.92) 0%, rgba(15,8,50,0.95) 30%, rgba(8,18,70,0.95) 60%, rgba(60,5,80,0.92) 100%)',
-          borderTop: 'none',
-        }}
-      >
+      <div className="backdrop-blur-xl pt-16 pb-8 footer-bg">
         <div className="container">
           {/* Main footer grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
@@ -63,7 +58,7 @@ export default function Footer() {
                 </div>
                 <span className="text-xl font-bold gradient-text">FatimaZehra AI Tutor</span>
               </Link>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
+              <p className="dark:text-gray-400 text-gray-600 text-sm leading-relaxed mb-6 max-w-sm">
                 Master Python with AI-powered coaching. 10 comprehensive chapters,
                 interactive quizzes, and personalized learning paths designed
                 to accelerate your programming journey.
@@ -78,7 +73,7 @@ export default function Footer() {
                       key={social.label}
                       href={social.href}
                       aria-label={social.label}
-                      className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 hover:-translate-y-1 transition-all duration-300"
+                      className="w-10 h-10 rounded-xl dark:bg-white/5 bg-gray-100 border dark:border-white/10 border-gray-200 flex items-center justify-center dark:text-gray-400 text-gray-500 dark:hover:text-white hover:text-gray-900 dark:hover:bg-white/10 hover:bg-gray-200 hover:-translate-y-1 transition-all duration-300"
                     >
                       <Icon className="w-4 h-4" />
                     </a>
@@ -101,7 +96,7 @@ export default function Footer() {
                           href={link.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-200"
+                          className="inline-flex items-center gap-1 text-sm dark:text-gray-400 text-gray-500 dark:hover:text-white hover:text-gray-900 hover:translate-x-1 transition-all duration-200"
                         >
                           {link.label}
                           <ExternalLink className="w-3 h-3 opacity-50" />
@@ -109,7 +104,7 @@ export default function Footer() {
                       ) : (
                         <Link
                           href={link.href}
-                          className="text-sm text-gray-400 hover:text-white hover:translate-x-1 transition-all duration-200 inline-block"
+                          className="text-sm dark:text-gray-400 text-gray-500 dark:hover:text-white hover:text-gray-900 hover:translate-x-1 transition-all duration-200 inline-block"
                         >
                           {link.label}
                         </Link>
@@ -125,7 +120,7 @@ export default function Footer() {
           <div className="flex justify-center mb-8">
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass border border-[#6C63FF]/20 text-sm">
               <span className="text-lg">🏆</span>
-              <span className="text-gray-300">
+              <span className="dark:text-gray-300 text-gray-600">
                 Built for{' '}
                 <span className="font-semibold gradient-text">Panaversity Agent Factory Hackathon IV</span>
               </span>
@@ -134,7 +129,7 @@ export default function Footer() {
 
           {/* Bottom bar */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#6C63FF]/40 to-transparent mb-6" />
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm dark:text-gray-500 text-gray-400">
             <p className="flex items-center gap-1">
               &copy; {new Date().getFullYear()} FatimaZehra AI Tutor. Made with
               <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400 inline mx-0.5" />

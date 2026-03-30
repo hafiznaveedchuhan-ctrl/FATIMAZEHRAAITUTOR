@@ -58,7 +58,7 @@ export default function Home() {
   const rating = useCounter(49, 2000) // 4.9 * 10
 
   return (
-    <div className="min-h-screen bg-surface-950 text-white">
+    <div className="min-h-screen dark:bg-surface-950 bg-white dark:text-white text-gray-900">
       <NavBar />
 
       {/* ====================================================
